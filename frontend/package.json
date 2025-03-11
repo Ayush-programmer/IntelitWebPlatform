@@ -7,5 +7,15 @@
     "react-router-dom": "^7.2.0",
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1"
-  }
+  },
+  "name": "projectintelit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

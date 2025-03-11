@@ -1,0 +1,993 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* variables */
+:root {
+    --primary-color: #8b75ed;
+    --primary-shaded: #887eb3;
+    --yellow-color: #FFA800;
+    --aqua-color: #62D2F1;
+    --pink-color: #FF4883;
+    --footer-color: #050214;
+    --font-color: #222;
+    --color-gray: hsl(254, 11%, 62%);
+}
+
+::selection {
+    background-color: #8b75edad;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.app {
+    font-family: "Poppins", sans-serif;
+    color: #000;
+    overflow: hidden;
+}
+
+.btn-primary-col {
+    font-family: "Poppins", sans-serif;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    padding: 0.65rem 1.5rem;
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.btn-primary-col:hover {
+    background-color: #8c7ab9;
+}
+
+.text-mute {
+    color: var(--color-gray);
+}
+
+h2 {
+    font-family: 'Play Fair Display' !important;
+    margin-bottom: 1rem;
+}
+
+/* navbar */
+
+.navbar {
+    width: 100%;
+    height: 4.35rem;
+    background: #fff;
+    box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+
+.navbar .container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3.5rem;
+}
+
+.navbar .brand-logo {
+    color: #785cf4 !important;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.navbar .side-wrapper {
+    transition: all ease 0.3s;
+}
+
+.navbar .navbar-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.side-wrapper .fa-close {
+    display: none;
+}
+
+.navbar .navbar-link,
+.navbar .login {
+    font-weight: 500;
+    color: #1a1a1a;
+    transition: 0.3s ease;
+    position: relative;
+}
+
+.navbar .navbar-link:hover,
+.navbar .login:hover {
+    color: var(--primary-color);
+}
+
+.navbar .navbar-links .active {
+    color: var(--primary-color);
+}
+
+.navbar .active::after,
+.navbar .navbar-link:hover::after,
+.navbar .login:hover::after {
+    content: "";
+    width: 75%;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary-color), white);
+    position: absolute;
+    bottom: -4px;
+    right: -0.1rem;
+}
+
+.navbar .login {
+    margin-right: 1.5rem;
+}
+
+.navbar .right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sidebar-btn {
+    display: none;
+}
+
+.sidebar-btn i {
+    font-size: 1.2rem;
+    color: #000 !important;
+}
+
+/* Hero section */
+
+.hero {
+    margin-top: 5.7rem;
+    position: relative;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 30rem;
+    width: 70vw;
+    z-index: -1;
+
+}
+
+.hero .hero-bg img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.hero-texts {
+    position: relative;
+    width: 85vw;
+    margin: 0 auto;
+    z-index: 9;
+}
+
+.hero-header {
+    font-family: "Playfair Display", serif;
+    width: 85vw;
+    margin: 0 auto;
+    margin-bottom: 2.25rem;
+    position: relative;
+}
+
+.hero-header h1 {
+    text-align: center;
+    font-size: 4.35rem;
+    font-weight: 900;
+}
+
+.diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: -20%;
+    left: 5%;
+}
+
+.ellipse {
+    width: 3rem;
+    height: 5rem;
+    border: 2px solid #C0C0C0;
+    border-radius: 50px;
+    position: relative;
+}
+
+.split-circle {
+    width: 2rem;
+    height: 2rem;
+    background: linear-gradient(to right, #000 50%, #A38FFD 50%);
+    border-radius: 50%;
+    position: absolute;
+    top: 55%;
+    left: -1rem;
+    transform: translateY(-50%);
+}
+
+.hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4rem;
+}
+
+.hero .hero-bottom .left .texts {
+    margin-bottom: 1.5rem;
+}
+
+.hero-bottom .left .texts h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+.hero-bottom .left .texts .active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2rem;
+    width: 70%;
+    height: 0.1rem;
+    background: linear-gradient(to right, var(--primary-color), white);
+    border-radius: 0.2rem;
+}
+
+.right-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+}
+
+.text h4 {
+    font-size: 1.25rem;
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+}
+
+.right i {
+    height: 2.75rem;
+    width: 2.75rem;
+    line-height: 2.75rem;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.fa-star {
+    background: var(--yellow-color);
+}
+
+.fa-graduation-cap {
+    background: var(--aqua-color);
+}
+
+.fa-chalkboard-user {
+    background: var(--pink-color);
+}
+
+/* Collaborations Section */
+
+.collaborations {
+    margin-bottom: 1.5rem;
+    margin-top: 5rem;
+}
+
+.collaborations .header {
+    margin: 1rem 0;
+    padding: 0 5rem;
+}
+
+.collaborations .header h2 {
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.collaborations .logos {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.collaborations .logos .logo {
+    width: 10rem;
+    height: 8rem;
+}
+
+.collaborations .logos .logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+
+}
+
+/* Smart Education Section */
+
+.smart-edu .container {
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.smart-edu .container .description {
+    width: 45%;
+}
+
+.smart-edu .container .description h2 {
+    font-size: 2.2rem;
+}
+
+.smart-edu .container .description p {
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+}
+
+.smart-edu .container .image {
+    width: 45%;
+}
+
+.smart-edu .container .image img {
+    width: 100%;
+    height: 30rem;
+}
+
+/* why choose us section*/
+
+.why-choose {
+    background-color: #8c7ab92d;
+    padding: 3rem 5rem;
+}
+
+.main-box {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+    background: #fff;
+}
+
+.image-box img {
+    width: 13rem;
+    height: 13rem;
+}
+
+.content-box h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #333;
+}
+
+.content-box p {
+    margin: 0.75rem 0;
+    max-width: 400px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-box {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    margin-bottom: 0.5rem;
+}
+
+.icon i {
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 2.15rem;
+    color: white;
+}
+
+.fa-diamond {
+    background: var(--aqua-color);
+}
+
+.fa-stopwatch {
+    background: var(--primary-color);
+}
+
+.fa-layer-group {
+    background: var(--pink-color);
+}
+
+.fa-award {
+    background: var(--yellow-color);
+}
+
+.feature-box h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.teacher-section .container {
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.teacher-content {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.teacher-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.teacher-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.teacher-visual {
+    flex: 1;
+    text-align: center;
+}
+
+.teacher-visual img {
+    width: 100%;
+    height: 30rem;
+    max-width: 400px;
+}
+
+/* Student Feedback Section */
+
+.reviews {
+    padding: 2rem 0;
+    background: #EBE8F3;
+    margin-bottom: 0;
+}
+
+.reviews .container {
+    padding: 1.5rem 3rem;
+}
+
+.reviews .container h2 {
+    font-size: 2.75rem;
+    margin-top: 0.5rem;
+}
+
+.reviews .box-container {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    padding-top: 4rem;
+    flex-wrap: wrap;
+}
+
+.reviews .box-container .box {
+    width: 18rem;
+    padding-bottom: 0.5rem;
+    text-align: center;
+    box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.3);
+    background: #fff;
+    margin: 2.35rem 1.2rem;
+    border-top-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.reviews .box-container .box img {
+    height: 5rem;
+    width: 5rem;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-top: -2.5rem;
+    border: 0.35rem solid var(--primary-color);
+    border-left: 0.35rem solid var(--pink-color);
+    border-bottom: 0.35rem solid var(--pink-color);
+}
+
+.reviews .box-container .box h3 {
+    font-size: 1.2rem;
+    color: var(--pink);
+    padding: 0.5rem 0.5rem;
+}
+
+.reviews .box-container .box p {
+    font-size: 1rem;
+    color: #999;
+    padding: 0 0.5rem;
+}
+
+.reviews .box-container .box .stars i {
+    font-size: 1.6rem;
+    color: var(--primary-color);
+    background: #fff;
+    padding: 1.3rem 0.1rem;
+}
+
+.reviews .box-container .box-1 img {
+    object-position: 55% 35%;
+}
+
+.reviews .box-container .box-2 img {
+    object-position: left center;
+}
+
+.reviews .box-container .box-3 img {
+    object-position: top left;
+}
+
+.reviews .box-container .box-4 img {
+    object-position: center 35%;
+}
+
+/* Footer Section */
+
+.footer {
+    background: var(--footer-color);
+    padding: 3.5rem 5rem;
+}
+
+.footer .flex-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.footer .flex-div .box {
+    flex-basis: 20%;
+}
+
+.footer .flex-div .logo-box {
+    flex-basis: 35%;
+    padding-right: 8%;
+}
+
+.footer .flex-div .box .header {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.footer .flex-div .box .logo {
+    color: #785cf4;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.footer .flex-div .box .description {
+    color: #666;
+    font-size: 0.935rem;
+    margin: 0.75rem 0;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.footer-bottom p {
+    font-size: 0.8em;
+    color: #cccccc;
+}
+
+.footer-bottom a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 0.65rem;
+    font-size: 1.2rem;
+}
+
+.footer-bottom a:hover {
+    color: var(--primary-shaded);
+}
+
+.footer-bottom p {
+    font-size: 1rem;
+}
+
+/* SignUp Page */
+
+.signUpApp .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Left side styling */
+.signUpApp .container .left {
+    height: 100%;
+    width: 65%;
+    /* background: linear-gradient(200deg, var(--primary-color), var(--primary-shaded)); */
+    background-image: url(./images/registerPageImage.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.signUpApp .container .left::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #785cf427, #887eb304);
+    z-index: 1;
+}
+
+/* Right side styling */
+.signUpApp .container .right {
+    width: 35%;
+    background: #ffffff;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.signUpApp .container .right h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.signUpApp .container .right label {
+    margin-bottom: 0.5rem;
+}
+
+.signUpApp .container input[type="text"],
+.signUpApp .container input[type="email"],
+.signUpApp .container input[type="password"],
+.signUpApp .container button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+/* Login Page */
+
+.loginApp .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.loginApp .container .form-container {
+    width: 65%;
+    padding: 2.5rem;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loginApp .container .form-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.loginApp .container .form-container label {
+    font-size: 1rem;
+}
+
+.loginApp .container .form-container input {
+    width: 80%;
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    border: 1px solid #ddd;
+    border-radius: 0.35rem;
+    font-size: 1rem;
+    display: block;
+}
+
+.loginApp .container .form-container button {
+    width: 80%;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+}
+
+.container .register-link,
+.container .login-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.container .register-link a,
+.container .login-link a {
+    color: #785cf4;
+    margin-left: 0.5rem;
+}
+
+.loginApp .container .image-container {
+    width: 35%;
+    height: 100%;
+    position: relative;
+}
+
+.loginApp .container .image-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: fill;
+    object-position: center;
+}
+
+.loginApp .container .image-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #785cf43a, #887eb30e);
+    z-index: 1;
+}
+
+/* Responsive styling */
+
+@media (max-width: 1024px) {
+    html {
+        font-size: 90%;
+    }
+}
+
+@media (max-width: 900px) {
+    html {
+        font-size: 84%;
+    }
+
+    .diagram {
+        bottom: -50%;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 75%;
+    }
+
+    .navbar {
+        height: 4.75rem;
+    }
+
+    .hero-header h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero-bottom {
+        margin-top: 18rem;
+    }
+
+    .navbar .container {
+        padding: 0 1rem;
+    }
+
+    .navbar .side-wrapper {
+        position: absolute;
+        background: #fff;
+        height: 100vh;
+        width: 25rem;
+        top: 0;
+        right: -30rem;
+        padding: 2rem 1rem;
+        z-index: 96;
+        opacity: 0;
+    }
+
+    .navbar .navbar-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .navbar .side-wrapper .fa-close {
+        display: block;
+        font-size: 2.2rem;
+        margin-left: 2rem;
+        cursor: pointer;
+    }
+
+    .navbar .navbar-link {
+        margin: 1rem 0;
+    }
+
+    .navbar .sidebar-btn {
+        display: block;
+        cursor: pointer;
+    }
+
+    .collaborations .logos {
+        flex-wrap: wrap;
+    }
+
+    .smart-edu .container {
+        flex-direction: column;
+    }
+
+    .smart-edu .container .description {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .smart-edu .container .image {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .why-choose {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .main-box {
+        width: 95%;
+        margin: 1rem auto;
+        padding: 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 2fr));
+    }
+
+    .teacher-section .container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .reviews .container .box-container .box {
+        width: 23rem;
+    }
+
+    .footer {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .footer .flex-div {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .footer .flex-div .logo-box {
+        padding-right: 0%;
+    }
+
+    .footer .box {
+        flex-basis: 80%;
+    }
+
+    /* SignUp Page */
+    .signUpApp .container .left {
+        display: none;
+    }
+
+    .signUpApp .container .right {
+        width: 75%;
+    }
+
+    /* Login Page */
+
+    .loginApp .container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .loginApp .container .form-container {
+        width: 100%;
+        padding: 1.25rem;
+        margin: 0 auto;
+    }
+
+    .loginApp .image-container {
+        display: none;
+    }
+
+    .loginApp .container .form-container input,
+    .loginApp .container .form-container button  {
+        width: 100%;
+    }
+}
+
+@media (max-width: 620px) {
+    .hero-bg {
+        top: 12vh;
+    }
+
+    .hero-bottom {
+        margin-top: 20rem;
+    }
+
+    .hero-header {
+        width: 90vw;
+    }
+
+    .hero-texts {
+        width: 90vw;
+        margin: 0 auto;
+    }
+
+    .feature-box {
+        padding: 1rem;
+    }
+
+    .content-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .signUpApp .container .right {
+        width: 92%;
+    }
+}
+
+@media (max-width: 400px) {
+    html {
+        font-size: 65%;
+    }
+
+    .hero-bg {
+        width: 90vw;
+    }
+}
