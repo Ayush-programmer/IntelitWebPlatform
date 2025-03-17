@@ -1,8 +1,14 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const BrowseCourses = () => {
   return (
-    <div>BrowseCourses</div>
+    <div>
+      <Navbar />
+      <div>BrowseCourses</div>
+      <Footer />
+    </div>
   )
 }
 

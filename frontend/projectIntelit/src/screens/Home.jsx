@@ -1,34 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const Home = () => {
   return (
     <div>
       <div classNameName="app">
-        <nav className="navbar">
-          <div className="container">
-            <a className="brand-logo" href="#">
-              Intelit
-            </a>
-            <div className="side-wrapper">
-              <i className="fa-solid fa-close"></i>
-              <div className="navbar-links">
-                <a className="navbar-link active" href="/home">Home</a>
-                <a className="navbar-link" href="/about">About</a>
-                <a className="navbar-link" href="/courses">Courses</a>
-                <a className="navbar-link" href="/contact">Contact Us</a>
-              </div>
-            </div>
-            <div className="right">
-              <div className="navbar-auth">
-                <a href="logInPage.html" className="login">LogIn</a>
-                <a href="signUpPage.html"><button className="register btn-primary-col">Register</button></a>
-              </div>
-              <div className="sidebar-btn">
-                <i className="fa-solid fa-bars-staggered"></i>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
         <section className="hero">
           <div className="container">
             <div className="hero-bg">
@@ -195,90 +174,57 @@ const Home = () => {
             <div className="box-container">
               <div className="box box-1" data-aos="fade-up" data-aos-duration="400">
                 <img src="./images/allison-griffith-Q76DPRQ3Ix0-unsplash.jpg" alt="student-1" />
-                  <h3>Allision Griffith</h3>
-                  <p>The instructors are knowledgable and engaging.</p>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
+                <h3>Allision Griffith</h3>
+                <p>The instructors are knowledgable and engaging.</p>
+                <div className="stars">
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                </div>
               </div>
               <div className="box box-2" data-aos="fade-up" data-aos-duration="800">
                 <img src="./images/yingchou-han-IJrIeCs3D4g-unsplash.jpg" alt="student-2" />
-                  <h3>Yingchou Han</h3>
-                  <p>The best thing is there's no time limit to complete the course.</p>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
+                <h3>Yingchou Han</h3>
+                <p>The best thing is there's no time limit to complete the course.</p>
+                <div className="stars">
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                </div>
               </div>
               <div className="box box-3" data-aos="fade-up" data-aos-duration="1200">
                 <img src="./images/martins-zemlickis-zbukvoF68UY-unsplash.jpg" alt="student-3" />
-                  <h3>Martins Zemlickis</h3>
-                  <p>I have got plenty of certificates, Thanks to Intelit. </p>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
+                <h3>Martins Zemlickis</h3>
+                <p>I have got plenty of certificates, Thanks to Intelit. </p>
+                <div className="stars">
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                </div>
               </div>
               <div className="box box-4" data-aos="fade-up" data-aos-duration="1600">
                 <img src="./images/jin-nishichan-ktHk5U-WyV4-unsplash.jpg" alt="student-4" />
-                  <h3>Jin Nishichan</h3>
-                  <p>This platform is really good to learn through.</p>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
+                <h3>Jin Nishichan</h3>
+                <p>This platform is really good to learn through.</p>
+                <div className="stars">
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star"></i>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <footer className="footer">
-          <div className="flex-div">
-            <div className="logo-box box">
-              <h3 className="header logo" href="#">Intelit</h3>
-              <p className="description text-mute">About pages are perfect spaces to talk about where you started,
-                how you've grown, and the ideals that have helped your organization mature.</p>
-            </div>
-            <div className="box">
-              <h3 className="header">Address</h3>
-              <p className="description text-mute">1090 A/01 Richmond Avenue, Houston, NY 7704, USA</p>
-            </div>
-            <div className="box">
-              <h3 className="header">Contact</h3>
-              <p className="description text-mute">+123 456 789 147</p>
-              <p className="description text-mute">example@gmail.com</p>
-            </div>
-            <div className="box">
-              <h3 className="header">Office</h3>
-              <p className="description text-mute">Monday - Saturday</p>
-              <p className="description text-mute">9AM - 10PM</p>
-            </div>
-          </div>
-          <hr className="text-mute" />
-            <div className="footer-bottom">
-              <div className="social-media">
-                <a href="#"><i className="fa-brands fa-instagram"></i></a>
-                <a href="#"><i className="fas fa-paper-plane"></i></a>
-                <a href="#"><i className="fa-brands fa-linkedin-in"></i></a>
-                <a href="#"><i className="fa-brands fa-twitter"></i></a>
-              </div>
-              <p>&copy; 2024 Copyright. <a href="#">Intelit</a></p>
-            </div>
-        </footer>
-
+        <Footer />
       </div>
     </div>
   )
