@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 const Login = () => {
   return (
     <div class="loginApp">
-        <div class="container">
-            <div class="form-container">
+        <div className="container">
+            <div className="form-container">
                 <h2>Login to Intelit</h2>
                 <form action="#" method="post">
                     <label for="username" class="text-mute">Username :</label>

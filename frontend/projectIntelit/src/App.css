@@ -380,30 +380,30 @@ h2 {
     background: #fff;
 }
 
-.image-box img {
+.why-choose .image-box img {
     width: 13rem;
     height: 13rem;
 }
 
-.content-box h2 {
+.why-choose .content-box h2 {
     font-family: "Playfair Display", serif;
     font-size: 1.8rem;
     font-weight: 900;
     color: #333;
 }
 
-.content-box p {
+.why-choose .content-box p {
     margin: 0.75rem 0;
     max-width: 400px;
 }
 
-.features-grid {
+.why-choose .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
 
-.feature-box {
+.why-choose .feature-box {
     background-color: white;
     border-radius: 8px;
     padding: 1.5rem;
@@ -411,7 +411,7 @@ h2 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.icon {
+.why-choose .icon {
     margin-bottom: 0.5rem;
 }
 
@@ -787,6 +787,229 @@ h2 {
     z-index: 1;
 }
 
+
+.page-header {
+    background-image: url("./images/pexels-dmitry-rodionov-20107094.jpg");
+    height: 40vh;
+    width: 100%;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.page-header h2 {
+    color: #fff;
+}
+
+.page-header p {
+    color: #fff;
+}
+
+/* Contact us Page */
+
+.contact-details {
+    padding: 5vw 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.contact-details .details {
+    width: 40%;
+}
+
+.contact-details .details span {
+    font-size: 0.75rem;
+}
+
+.contact-details .details h2 {
+    font-size: 1.65rem;
+    line-height: 2.2rem;
+    padding: 1.25rem 0;
+}
+
+.contact-details .details h3 {
+    font-size: 1rem;
+    padding-bottom: 1rem;
+}
+
+.contact-details .details .location li {
+    list-style: none;
+    display: flex;
+    padding: 0.65rem 0;
+    align-items: center;
+}
+
+.contact-details .details li i {
+    font-size: 0.85rem;
+    padding-right: 1.3rem;
+}
+
+.contact-details .details li p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.contact-details .map {
+    width: 50%;
+    height: 25rem;
+}
+
+.contact-details .map iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.form-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.8rem;
+    padding: 5rem;
+    border: 1px solid #e1e1e1;
+}
+
+.form-details form {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-details form span {
+    font-size: 0.75rem;
+}
+
+.form-details form h2 {
+    font-size: 1.65rem;
+    line-height: 2.2rem;
+    padding: 1.25rem 0;
+}
+
+.form-details form input,
+.form-details form textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    outline: none;
+    margin-bottom: 1.25rem;
+    border: 1px solid #e1e1e1;
+}
+
+.form-details form button {
+    background: #088178;
+    color: #fff;
+}
+
+.form-details .people div {
+    padding-bottom: 1.6rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.form-details .people div img {
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    margin-right: 1rem;
+    border-radius: 50%;
+}
+
+.form-details .people div p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.6rem;
+}
+
+.form-details .people div p span {
+    display: block;
+    font-weight: 600;
+    color: #000;
+    font-size: 1rem;
+}
+
+.contactPage h1,
+.about h1 {
+    font-size: 3.125rem;
+    line-height: 4rem;
+    color: #222;
+}
+
+.contactPage h2,
+.about h2 {
+    font-size: 2.875rem;
+    line-height: 3.375rem;
+    color: #222;
+}
+
+.contactPage h4,
+.about h4 {
+    font-size: 1.25rem;
+    color: #222;
+}
+
+.contactPage h6,
+.about h6 {
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.contactPage p,
+.about p {
+    font-size: 1rem;
+    color: #465b52;
+    margin: 0.9375rem;
+}
+
+.contactPage .section-p1,
+.about .section-p1 {
+    padding: 2.5rem 5rem;
+}
+
+.contactPage .section-m1,
+.about .section-m1 {
+    margin: 2.5rem 0;
+}
+
+.contactPage .btn {
+    padding: 0.85rem 1.85rem;
+    background: var(--primary-color);
+    color: #fff;
+    border: 0;
+    outline: 0;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* About Page */
+
+.about .page-header-about {
+    background-image: url("./images/yingchou-han-IJrIeCs3D4g-unsplash.jpg");
+}
+
+.about-head {
+    display: flex;
+    align-items: center;
+}
+
+.about-head img {
+    width: 50%;
+    height: auto;
+}
+
+.about-head div {
+    padding-left: 2.5rem;
+}
+
+.about-head div p {
+    margin-left: 0;
+}
+
 /* Responsive styling */
 
 @media (max-width: 1024px) {
@@ -946,8 +1169,18 @@ h2 {
     }
 
     .loginApp .container .form-container input,
-    .loginApp .container .form-container button  {
+    .loginApp .container .form-container button {
         width: 100%;
+    }
+
+    /* About Page */
+
+    .form-details {
+        padding: 2rem;
+    }
+
+    .form-details form {
+        width: 45%;
     }
 }
 
@@ -980,6 +1213,33 @@ h2 {
     .signUpApp .container .right {
         width: 92%;
     }
+
+    .contact-details {
+        flex-direction: column;
+    }
+
+    .contact-details .details {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-details .map {
+        width: 100%;
+    }
+
+    .form-details {
+        flex-direction: column;
+    }
+
+    .form-details form {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-details .people {
+        width: 100%;
+    }
+
 }
 
 @media (max-width: 400px) {
