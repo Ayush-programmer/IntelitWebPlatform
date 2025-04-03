@@ -677,6 +677,7 @@ h2 {
 /* Right side styling */
 .signUpApp .container .right {
     width: 35%;
+    height: 95%;
     background: #ffffff;
     padding: 40px;
     display: flex;
@@ -718,6 +719,7 @@ h2 {
 
 .loginApp .container .form-container {
     width: 65%;
+    height: 95%;
     padding: 2.5rem;
     background-color: #ffffff;
     display: flex;
@@ -757,10 +759,16 @@ h2 {
     color: #555;
 }
 
-.container .register-link a,
-.container .login-link a {
+.loginApp .container .link .links,
+.signUpApp .container p .links  {
     color: #785cf4;
     margin-left: 0.5rem;
+}
+
+.loginApp .container .link2,
+.signUpApp .container .link2 {
+    position: absolute;
+    bottom: 2rem;
 }
 
 .loginApp .container .image-container {
@@ -786,7 +794,6 @@ h2 {
     background: linear-gradient(to right, #785cf43a, #887eb30e);
     z-index: 1;
 }
-
 
 .page-header {
     background-image: url("./images/pexels-dmitry-rodionov-20107094.jpg");
@@ -1250,4 +1257,48 @@ h2 {
     .hero-bg {
         width: 90vw;
     }
+}
+
+/* Course Cards Section */
+
+.courses-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+}
+
+.course-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.course-details {
+  padding: 1rem;
+  text-align: center;
+}
+
+.course-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.course-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
 }

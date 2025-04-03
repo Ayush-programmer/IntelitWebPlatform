@@ -31,7 +31,7 @@ const Home = () => {
                     <h3 className="text-mute">PRACTICAL LEARNING</h3>
                   </div>
                   <div className="explore-btn">
-                    <button className="btn-primary-col">Explore More</button>
+                    <Link to='/browsecourses' className="btn-primary-col">Explore More</Link>
                   </div>
                 </div>
                 <div className="right">
@@ -96,7 +96,7 @@ const Home = () => {
                 unbar and attend
                 traditional
                 in-person classNamees due to their location, schedule.</p>
-              <button className="btn-primary-col">Let's Get Started</button>
+              <Link to='/browsecourses' className='btn-primary-col'>Let's Get Started</Link>
             </div>
             <div className="image" data-aos="fade-left">
               <img src="./images/smartEdu.svg" alt="" />
@@ -112,7 +112,7 @@ const Home = () => {
                 <p className="text-mute">I was designed to assist user with a wide range of tasks and answer
                   questions to the best of
                   my ability.</p>
-                <button className="btn-primary-col">Learn More</button>
+                <Link to='/about' className="btn-primary-col">Learn More</Link>
               </div>
               <div className="image-box">
                 <img src="./images/book-with-brain.png" alt="Program Image" />
@@ -158,7 +158,7 @@ const Home = () => {
               <h2>Join Intelit as a Teacher</h2>
               <p>Share your expertise with eager learners. Create, list, and manage your courses on our platform.
                 Inspire students globally and build your teaching portfolio.</p>
-              <button className="btn-primary-col">Start Teaching</button>
+              <Link to='/teacherlogin' className="btn-primary-col">Start Teaching</Link>
             </div>
             <div className="teacher-visual" data-aos="fade-left">
               <img src="./images/teacherSec.svg" alt="Teacher Illustration" />

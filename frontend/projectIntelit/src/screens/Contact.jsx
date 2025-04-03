@@ -9,8 +9,10 @@ const Contact = () => {
       <div>
         <div className='contactPage'>
           <div className="page-header page-header-about">
-            <h2>#let's_talk</h2>
-            <p>LEAVE A MESSAGE, We love to hear from you!</p>
+            <div className="overlay">
+              <h2>#let's_talk</h2>
+              <p>LEAVE A MESSAGE, We love to hear from you!</p>
+            </div>
           </div>
 
           <div className="contact-details div-p1">
