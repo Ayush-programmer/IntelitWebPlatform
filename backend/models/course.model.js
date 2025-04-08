@@ -15,6 +15,10 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    thumbnail: {
+        type: String,
+        required: true,
+    },
     teacher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Teacher',
@@ -64,7 +68,7 @@ const courseSchema = new mongoose.Schema({
             required: true,
         },
         lessons: [{
-            lesssonTitle: {
+            lessonTitle: {
                 type: String,
                 required: true,
             },

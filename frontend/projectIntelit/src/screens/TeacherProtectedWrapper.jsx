@@ -1,45 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { TeacherContext } from '../context/Teacher.context.jsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../config/axios.js';
 
 const TeacherProtectedWrapper = ({ children }) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [teacher, setTeacher] = useState(null);
-    const navigate = useNavigate();
+    const { teacher, setTeacher, setIsLoading, setError } = useContext(TeacherContext);
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!token || role != 'teacher') {
+        if (!token || role !== 'teacher') {
             navigate('/teacherlogin');
             return;
         }
 
-        axios.get(`/teachers/profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }).then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-                setTeacher(response.data.teacher);
-                setIsLoading(false);
-            }
-        }).catch(err => {
-            console.log(err);
-            navigate('/teacherlogin');
-        });
-    }, [token, navigate]);
+        if (!teacher) {
+            setIsLoading(true);
+            axios.get('/teachers/profile', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then((res) => {
+                    setTeacher(res.data.teacher);
+                })
+                .catch((err) => {
+                    console.error('Error fetching teacher profile:', err);
+                    setError('Failed to fetch teacher data');
+                    navigate('/teacherlogin');
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }
+    }, [token, role, teacher, navigate, setTeacher, setIsLoading, setError]);
 
-    if (isLoading) {
-        return (
-            <div>Loading...</div>
-        );
-    }
-
-    return (
-        <>{children}</>
-    );
+    return <>{children}</>;
 };
 
 export default TeacherProtectedWrapper;

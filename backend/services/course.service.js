@@ -2,15 +2,15 @@ import courseModel from "../models/course.model.js";
 
 // Create new course
 
-export const createCourse = async ({ title, description, category, teacherId,  topicsToLearn = [], faq = [], references = [], materials = [], courseContents = [], price = 0, reviews = [], enrolledStudents = [] }) => {
-    if (!title || !description || !category || !teacherId) {
-        throw new Error("Title, description, category and teacherId are required");
+export const createCourse = async ({ title, description, category, thumbnail, teacherId,  topicsToLearn = [], faq = [], references = [], materials = [], courseContents = [], price = 0, reviews = [], enrolledStudents = [] }) => {
+    if (!title || !description || !category || !teacherId || !thumbnail) {
+        throw new Error("Title, description, category and teacherId and thumbnail are required");
     }
 
-    console.log("Creating course with data: ", { title, description, category, teacherId, materials, topicsToLearn, faq, references, courseContents, price, reviews, enrolledStudents });
+    console.log("Creating course with data: ", { title, description, category, teacherId, thumbnail, materials, topicsToLearn, faq, references, courseContents, price, reviews, enrolledStudents });
     
     try {
-        const course = await courseModel.create({ title, description, category, teacher: teacherId, materials, topicsToLearn, faq, references, price, courseContents, reviews, enrolledStudents });
+        const course = await courseModel.create({ title, description, category, thumbnail, teacher: teacherId, materials, topicsToLearn, faq, references, price, courseContents, reviews, enrolledStudents });
         return course;
     } catch (error) {
         throw error;

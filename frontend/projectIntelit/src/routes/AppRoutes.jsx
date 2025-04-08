@@ -12,6 +12,10 @@ import UserDashboard from '../screens/UserDashboard.jsx'
 import TeacherDashboard from '../screens/TeacherDashboard.jsx'
 import UserProtectedWrapper from '../screens/UserProtectedWrapper.jsx'
 import TeacherProtectedWrapper from '../screens/TeacherProtectedWrapper.jsx'
+import Course from '../screens/Course.jsx'
+import CourseUpload from '../screens/CourseUpload.jsx'
+import EnrollPage from '../screens/EnrollPage.jsx'
+import PaymentSuccessPage from '../screens/PaymentSuccessPage.jsx'
 
 const AppRoutes = () => {
     return (
@@ -27,6 +31,10 @@ const AppRoutes = () => {
                 <Route path='/teacherregister' element={<TeacherRegister />} />
                 <Route path='/userdashboard' element={<UserProtectedWrapper><UserDashboard /></UserProtectedWrapper>} />
                 <Route path='/teacherdashboard' element={<TeacherProtectedWrapper><TeacherDashboard /></TeacherProtectedWrapper>} />
+                <Route path='/course/:courseId' element={<Course />} />
+                <Route path='/uploadcourse' element={<TeacherProtectedWrapper><CourseUpload /></TeacherProtectedWrapper>} />
+                <Route path='/enroll/:id' element={<UserProtectedWrapper><EnrollPage /></UserProtectedWrapper>} />
+                <Route path='/payment-success/:courseId' element={<UserProtectedWrapper><PaymentSuccessPage /></UserProtectedWrapper>} />
             </Routes>
         </BrowserRouter>
     )

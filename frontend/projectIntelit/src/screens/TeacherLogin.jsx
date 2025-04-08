@@ -7,12 +7,14 @@ const TeacherLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { teacher, setTeacher } = useContext(TeacherContext);
+    const { setTeacher, setIsLoading, setError } = useContext(TeacherContext);
 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setError(null);
 
         axios.post('/teachers/login', { email, password }).then((res) => {
             console.log(res.data)
@@ -25,6 +27,9 @@ const TeacherLogin = () => {
             navigate('/teacherdashboard');
         }).catch((err) => {
             console.log(err);
+            setError('Invalid email or password')
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
     return (

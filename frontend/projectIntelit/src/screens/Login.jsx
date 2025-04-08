@@ -7,23 +7,27 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { user, setUser } = useContext(UserContext);
+    const { setUser, setIsLoading, setError } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setError(null);
 
         axios.post('/users/login', { email, password }).then((res) => {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('role', res.data.role);
-            console.log(res.data.user);
-
+            
             setUser(res.data.user);
 
             navigate('/userdashboard');
         }).catch((err) => {
             console.log(err);
+            setError('Invalid email or password')
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
     return (

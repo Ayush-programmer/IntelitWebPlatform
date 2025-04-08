@@ -54,12 +54,21 @@ export const loginTeacherController = async (req, res) => {
 }
 
 export const profileController = async (req, res) => {
-    console.log(req.teacher);
-
-    const teacher = await teacherService.findTeacher({ email: req.teacher.email });
+    const teacher = await teacherService.findTeacher({ email: req.user?.email });
     console.log(teacher);
 
     res.status(200).json({ teacher: teacher });
+}
+
+export const getTeacherByIdController = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    const teacher = await teacherService.findTeacher({ _id: id });
+    if (!teacher) {
+        return res.status(404).json({ error: 'No such account found' });
+    }
+
+    res.status(200).json({ teacher });
 }
 
 export const logoutController = async (req, res) => {

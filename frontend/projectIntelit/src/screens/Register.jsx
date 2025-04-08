@@ -16,10 +16,9 @@ const Register = () => {
     e.preventDefault();
 
     axios.post('/users/register', { username, email, password }).then((res) => {
-      console.log(res.data);
-
-
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.role);
+      
       setUser(res.data.user);
 
       navigate('/userdashboard');

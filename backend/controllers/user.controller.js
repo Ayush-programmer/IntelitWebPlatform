@@ -1,7 +1,7 @@
 import userModel from "../models/user.model.js";
 import * as userService from '../services/user.service.js';
 import { validationResult } from 'express-validator';
-// import redisClient from "../services/redis.service.js";
+import redisClient from "../services/redis.service.js";
 
 export const createUserController = async (req, res) => {
     const errors = validationResult(req);
@@ -11,13 +11,11 @@ export const createUserController = async (req, res) => {
     
     try {
         const { username, email, password } = req.body;
-        console.log(username, email, password)
         const user = await userService.createUser(username, email, password);
-        console.log(user);
-        const token = await user.generateJWT();
-        console.log(token);
+        const token = await user.generateJWT({role: "student"});
+        res.cookie('token', token);
         delete user._doc.password;
-        res.status(201).json({ user, token });
+        res.status(201).json({ user, token, role: "student" });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -60,15 +58,24 @@ export const profileController = async (req, res) => {
     res.status(200).json({ user: user });
 }
 
-// export const logoutController = async (req, res) => {
-//     try {
-//         const token = req.cookies?.token || req.headers?.authorization.split(' ')[1];
-//         redisClient.set(token, 'logout', 'EX', 60 * 60 * 24);
-//         res.status(200).json({ message: 'Logged out successfully' });
-//     } catch (error) {
-//         res.status(400).json({ error: error.message });
-//     }
-// }
+export const profileByIdController = async (req, res) => {
+    const { id } = req.params;
+    const user = await userService.findUserById(id);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({ user });
+}
+
+export const logoutController = async (req, res) => {
+    try {
+        const token = req.cookies?.token || req.headers?.authorization.split(' ')[1];
+        redisClient.set(token, 'logout', 'EX', 60 * 60 * 24);
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 
 export const getAllUsersController = async (req, res) => {
     try {

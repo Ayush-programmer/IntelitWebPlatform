@@ -11,6 +11,11 @@ export const TeacherProvider = ({ children }) => {
         setTeacher(teacherData);
     };
 
+    const clearTeacher = () => {
+        setTeacher(null);
+        setError(null);
+    };
+
     const value = {
         teacher, setTeacher, isLoading, setIsLoading, error, setError, updateTeacher
     };

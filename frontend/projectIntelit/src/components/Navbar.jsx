@@ -1,34 +1,65 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import UserAuth from '../Auth/Userauth';
 
 const Navbar = () => {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  console.log(showSidebar);
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    if (!token || role !== 'student') {
+      setIsAuthenticated(false)
+    } else {
+      setIsAuthenticated(true);
+    }
+  });
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+  }, [isAuthenticated]);
+
   return (
     <div>
-        <nav className="navbar">
-          <div className="container">
-            <a className="brand-logo" href="#">
-              Intelit
-            </a>
-            <div className="side-wrapper">
-              <i className="fa-solid fa-close"></i>
-              <div className="navbar-links">
-                <a className="navbar-link active" href="/">Home</a>
-                <a className="navbar-link" href="/about">About</a>
-                <a className="navbar-link" href="/browsecourses">Courses</a>
-                <a className="navbar-link" href="/contact">Contact Us</a>
-              </div>
-            </div>
-            <div className="right">
-              <div className="navbar-auth">
-                <Link to='/login' className='login'>LogIn</Link>
-                <Link to='/register'><button className="register btn-primary-col">Register</button></Link>
-              </div>
-              <div className="sidebar-btn">
-                <i className="fa-solid fa-bars-staggered"></i>
-              </div>
+      <nav className="navbar">
+        <div className="container">
+          <a className="brand-logo" href="#">
+            Intelit
+          </a>
+          <div className={`side-wrapper ${showSidebar ? "show" : ""}`}>
+            <i className="fa-solid fa-close" onClick={() => setShowSidebar(false)}></i>
+            <div className="navbar-links">
+              <Link className="navbar-link active" to="/">Home</Link>
+              <Link className="navbar-link" to="/about">About</Link>
+              <Link className="navbar-link" to="/browsecourses">Courses</Link>
+              <Link className="navbar-link" to="/contact">Contact Us</Link>
             </div>
           </div>
-        </nav>
+
+          <div className="right">
+            {!isAuthenticated ? (
+              <div className="navbar-auth">
+                <Link className="navbar-link login" to="/login">LogIn</Link>
+                <Link className="navbar-link" to="/register">
+                  <button className="register btn-primary-col">Register</button>
+                </Link>
+              </div>) : (
+              <div className='navbar-auth'>
+                <a href="">Logout</a>
+              </div>
+            )
+            }
+
+            {!showSidebar ? <div className="sidebar-btn" onClick={() => setShowSidebar(true)}> <i className="fa-solid fa-bars-staggered"></i></div> : ''}
+          </div>
+
+        </div>
+      </nav>
     </div>
   )
 }

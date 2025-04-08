@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         select: false
     },
-},  {
+    enrolledCourses: [{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Course'
+    }],
+}, {
     timestamps: true
 });
 
@@ -35,8 +39,7 @@ userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 
-userSchema.methods.generateJWT = function ()
- {
+userSchema.methods.generateJWT = function () {
     return jwt.sign({ email: this.email, _id: this._id, role: "student" }, process.env.JWT_SECRET, { expiresIn: '24h' });
 }
 

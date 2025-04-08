@@ -1,15 +1,13 @@
-import courseModel from "../models/course.model.js";
 import * as courseService from '../services/course.service.js';
-import { validationResult } from 'express-validator';
 
 export const createCourse = async (req, res) => {
     try {
         console.log(req.body);
         
-        const { title, description, category, price, courseContents, topicsToLearn, faq, references, materials, reviews, enrolledStudents } = req.body;
+        const { title, description, category, price, thumbnail, courseContents, topicsToLearn, faq, references, materials, reviews, enrolledStudents } = req.body;
 
-        if (!title || !description || !category) {
-            return res.status(400).json({ error: "Title, description, category, and price are required." });
+        if (!title || !description || !category || !thumbnail) {
+            return res.status(400).json({ error: "Title, description, category, and thumbnail are required." });
         }
 
         console.log(req.user);
@@ -19,6 +17,7 @@ export const createCourse = async (req, res) => {
             description,
             category,
             price,
+            thumbnail,
             teacherId: req.user._id, // Authenticated teacher
             courseContents,
             topicsToLearn,
@@ -41,6 +40,8 @@ export const createCourse = async (req, res) => {
 
 export const getCourseById = async (req, res) => {
     try {
+        console.log('controllers course.controller.js getCourseById called');
+        
         const { courseId } = req.params;
         const course = await courseService.findCourseById(courseId);
 

@@ -1,3 +1,4 @@
+import e from 'express';
 import userModel from '../models/user.model.js'
 
 export const createUser = async (username, email, password) => {
@@ -15,6 +16,11 @@ export const createUser = async (username, email, password) => {
 export const findUser = async ({ email }) => {
     const user = await userModel.findOne({ email: email });
 
+    return user;
+}
+
+export const findUserById = async ({ id }) => {
+    const user = await userModel.findById(id);
     return user;
 }
 
