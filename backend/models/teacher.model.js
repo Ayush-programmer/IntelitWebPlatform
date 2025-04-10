@@ -26,15 +26,57 @@ const teacherSchema = new mongoose.Schema({
         select: false,
         required: true,
     },
-    bio: {
-        type: String,
+    isProfileComplete: {
+        type: Boolean,
+        default: false
     },
-    expertise: {
-        type: String,
+    profile: {
+        fullName: {
+            type: String,
+            trim: true
+        },
+        phoneNumber: {
+            type: String,
+            trim: true
+        },
+        gender: {
+            type: String,
+            enum: ['male', 'female', 'other']
+        },
+        dateOfBirth: {
+            type: Date
+        },
+        bio: {
+            type: String,
+            maxlength: [300, 'Bio must be at most 300 characters long']
+        },
+        profilePic: {
+            type: String
+            // URL or image path
+        },
+        currentPosition: {
+            type: String,
+            trim: true
+            // No enum, controlled by frontend
+        },
+        techStack: [{
+            type: String,
+            trim: true
+        }],
+        education: {
+            type: String,
+            trim: true
+        },
+        socialLinks: {
+            linkedIn: { type: String, trim: true },
+            github: { type: String, trim: true },
+            twitter: { type: String, trim: true }
+        }
     },
     createdCourses: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Course'
-    }],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
+    }]
 }, {
     timestamps: true
 });

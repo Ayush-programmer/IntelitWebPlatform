@@ -53,9 +53,10 @@ const CourseUpload = () => {
     const handleVideoUpload = async (file, moduleIndex, lessonIndex) => {
         setLoading(true);
         try {
-            const url = await uploadVideoToCloudinary(file);
+            const data = await uploadVideoToCloudinary(file);
             const updatedContent = [...formData.courseContents];
-            updatedContent[moduleIndex].lessons[lessonIndex].videoURL = url;
+            updatedContent[moduleIndex].lessons[lessonIndex].videoURL = data.url;
+            updatedContent[moduleIndex].lessons[lessonIndex].videoDuration = data.duration;
             setFormData({ ...formData, courseContents: updatedContent });
         } catch (err) {
             console.error('Video upload error:', err);

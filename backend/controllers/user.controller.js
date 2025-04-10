@@ -8,11 +8,11 @@ export const createUserController = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    
+
     try {
         const { username, email, password } = req.body;
         const user = await userService.createUser(username, email, password);
-        const token = await user.generateJWT({role: "student"});
+        const token = await user.generateJWT({ role: "student" });
         res.cookie('token', token);
         delete user._doc.password;
         res.status(201).json({ user, token, role: "student" });
@@ -41,7 +41,7 @@ export const loginUserController = async (req, res) => {
             return res.status(401).json({ error: 'Invalid password' });
         }
 
-        const token = await user.generateJWT({role: "student"});
+        const token = await user.generateJWT({ role: "student" });
 
         res.cookie('token', token);
 
@@ -54,7 +54,7 @@ export const loginUserController = async (req, res) => {
 export const profileController = async (req, res) => {
     const user = await userService.findUser({ email: req.user.email });
     console.log(user);
-    
+
     res.status(200).json({ user: user });
 }
 
@@ -66,6 +66,56 @@ export const profileByIdController = async (req, res) => {
     }
     res.status(200).json({ user });
 }
+
+export const completeProfileController = async (req, res) => {
+    try {
+        const userId = req.user._id; // JWT middleware ne yeh set kiya
+        const {
+            fullName,
+            phone,
+            gender,
+            dateOfBirth,
+            bio,
+            profilePic,
+            interests,
+            currentStatus,
+            socialLinks,
+        } = req.body;
+        console.log(req.body);
+        console.log(req.user);
+
+        const user = await userModel.findOne({ _id: userId });
+
+        console.log(user);
+
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                profile: {
+                    fullName,
+                    phone,
+                    gender,
+                    dateOfBirth,
+                    bio,
+                    profilePic,
+                    interests,
+                    currentStatus,
+                    socialLinks,
+                },
+                isProfileComplete: true
+            },
+            { new: true }
+        );
+        console.log(updatedUser);
+
+
+        res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+};
 
 export const logoutController = async (req, res) => {
     try {

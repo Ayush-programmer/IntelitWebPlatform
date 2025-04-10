@@ -50,7 +50,7 @@ const Navbar = () => {
                 </Link>
               </div>) : (
               <div className='navbar-auth'>
-                <a href="">Logout</a>
+                <Link className="navbar-link" to="/logout">Logout</Link>
               </div>
             )
             }

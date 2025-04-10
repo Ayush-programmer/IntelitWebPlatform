@@ -3,7 +3,7 @@ const uploadPresetCourse = import.meta.env.VITE_CLOUD_PRESET_COURSE;
 
 export const uploadThumbnailToCloudinary = async (file) => {
     console.log(file);
-    
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPresetCourse);
@@ -33,6 +33,12 @@ export const uploadVideoToCloudinary = async (file) => {
 
     const data = await res.json();
 
-    if (data.secure_url) return data.secure_url;
-    else throw new Error(data.error?.message || "Failed to upload video to Cloudinary");
+    if (data.secure_url) {
+        return {
+            url: data.secure_url,
+            duration: data.duration || 0, // duration in seconds
+        };
+    } else {
+        throw new Error(data.error?.message || "Failed to upload video to Cloudinary");
+    }
 };

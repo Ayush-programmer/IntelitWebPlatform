@@ -21,7 +21,6 @@ const Course = () => {
         setShowSidebar(prev => !prev);
     };
 
-
     const { user, isLoading, fetchUserData } = useContext(UserContext);
 
     useEffect(() => {
@@ -50,14 +49,20 @@ const Course = () => {
 
     useEffect(() => {
         if (!user) {
+            console.log('fetchUserData called from Course component');
             fetchUserData();
-        }
-        if (user) {
-            setStudentEnrolled(user.enrolledCourses.includes(courseId));
         }
     }, [user, fetchUserData])
 
-    if (isLoading) {
+    useEffect(() => {
+        if(user) {
+            setStudentEnrolled(user?.enrolledCourses.flat().some(id => id.toString() === courseId));
+        }
+    }, [user, courseId]);
+
+    
+
+    if (isLoading && !user) {
         return <div>Loading...</div>;
     }
 
@@ -119,8 +124,8 @@ const Course = () => {
                                 <div className="right">
                                     {/* Enroll button */}
                                     {
-                                        studentEnrolled ?
-                                            <Link to={`/enroll/${course._id}`} className="btn-primary-col enroll-btn">Enroll Now</Link> : ''
+                                        !studentEnrolled &&
+                                            <Link to={`/enroll/${course._id}`} className="btn-primary-col enroll-btn">Enroll Now</Link>
                                     }
                                 </div>
                             </div>
@@ -139,7 +144,7 @@ const Course = () => {
                             </div>
                             <div className="content-div">
                                 {/* Course contents and modules */}
-                                {course.courseContents && <CourseContents courseModules={course.courseContents} setIndices={setIndices} />}
+                                {course.courseContents && <CourseContents courseModules={course.courseContents} setIndices={setIndices} user={user} courseId={courseId} />}
                             </div>
                         </div>
                     </div>

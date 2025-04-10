@@ -24,9 +24,31 @@ const userSchema = new mongoose.Schema({
         select: false
     },
     enrolledCourses: [{
-        type: [mongoose.Schema.Types.ObjectId],
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Course'
     }],
+    profile: {
+        fullName: { type: String },
+        phone: { type: String },
+        gender: { type: String, enum: ['Male', 'Female', 'Other'] },
+        dateOfBirth: { type: Date },
+        bio: { type: String },
+        profilePic: { type: String }, // store file path or URL
+        socialLinks: {
+            linkedIn: { type: String },
+            github: { type: String },
+            twitter: { type: String }
+        },
+        interests: [{ type: String }],
+        currentStatus: {
+            type: String,
+            enum: ['Studying', 'Berojgaar', 'Working Professional']
+        }
+    },
+    isProfileComplete: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });
