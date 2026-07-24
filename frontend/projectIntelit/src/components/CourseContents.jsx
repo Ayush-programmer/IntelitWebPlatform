@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
 import { FaPlayCircle, FaChevronDown, FaLock } from 'react-icons/fa';
 
-const CourseContents = ({ courseModules, setIndices, user, courseId }) => {
+const CourseContents = ({ courseModules, setIndices, user, studentEnrolled }) => {
   const [openModule, setOpenModule] = useState(null);
-  const [activeLesson, setActiveLesson] = useState([null, null]); // [moduleIndex, lessonIndex]
+  const [activeLesson, setActiveLesson] = useState([null, null]);
   console.log(user);
-  console.log(courseId);
-
-  const studentEnrolled = user?.enrolledCourses
-    ?.flat()
-    ?.some(id => id.toString() === courseId);
-
-
-  console.log("Student enrolled:", studentEnrolled);
-
 
   const toggleModule = (index) => {
     setOpenModule(openModule === index ? null : index);

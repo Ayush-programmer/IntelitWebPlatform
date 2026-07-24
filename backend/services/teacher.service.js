@@ -13,9 +13,15 @@ export const createTeacher = async (name, email, password) => {
 }
 
 export const findTeacher = async ({ email }) => {
-    const teacher = await teacherModel.findOne({ email: email });
+    const teacher = await teacherModel.findOne({ email: email }).populate('createdCourses', 'title category thumbnail').select('-password -__v');
 
     return teacher;
+}
+
+export const updateTeacherProfile = async (teacherId, updateData) => {
+    const updatedTeacher = await teacherModel.findByIdAndUpdate(teacherId, updateData, { new: true }).select('-password -__v');
+
+    return updatedTeacher;
 }
 
 export const getAllTeachers = async ({ teacherId }) => {

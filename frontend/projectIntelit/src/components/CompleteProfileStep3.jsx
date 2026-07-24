@@ -3,13 +3,8 @@
 import React, { useState } from 'react';
 import { uploadThumbnailToCloudinary } from '../utils/cloudinaryUtils';
 
-const StepThree = ({ formData, setFormData, prevStep, handleSubmit }) => {
+const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit }) => {
     const [localImage, setLocalImage] = useState(null);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
 
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
@@ -38,8 +33,16 @@ const StepThree = ({ formData, setFormData, prevStep, handleSubmit }) => {
                 <input
                     type="url"
                     name="linkedin"
-                    value={formData.linkedin || ''}
-                    onChange={handleChange}
+                    value={formData.socialLinks.linkedIn}
+                    onChange={(e) =>
+                        setFormData({
+                            ...formData,
+                            socialLinks: {
+                                ...formData.socialLinks,
+                                linkedIn: e.target.value,
+                            },
+                        })
+                    }
                     placeholder="https://linkedin.com/in/username"
                 />
             </div>
@@ -49,8 +52,16 @@ const StepThree = ({ formData, setFormData, prevStep, handleSubmit }) => {
                 <input
                     type="url"
                     name="github"
-                    value={formData.github || ''}
-                    onChange={handleChange}
+                    value={formData.socialLinks.github}
+                    onChange={(e) =>
+                        setFormData({
+                            ...formData,
+                            socialLinks: {
+                                ...formData.socialLinks,
+                                github: e.target.value,
+                            },
+                        })
+                    }
                     placeholder="https://github.com/username"
                 />
             </div>
@@ -60,8 +71,16 @@ const StepThree = ({ formData, setFormData, prevStep, handleSubmit }) => {
                 <input
                     type="url"
                     name="twitter"
-                    value={formData.twitter || ''}
-                    onChange={handleChange}
+                    value={formData.socialLinks.twitter}
+                    onChange={(e) =>
+                        setFormData({
+                            ...formData,
+                            socialLinks: {
+                                ...formData.socialLinks,
+                                twitter: e.target.value,
+                            },
+                        })
+                    }
                     placeholder="https://twitter.com/username"
                 />
             </div>

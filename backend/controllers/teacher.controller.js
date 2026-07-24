@@ -17,7 +17,7 @@ export const createTeacherController = async (req, res) => {
         const token = await teacher.generateJWT();
         console.log(token);
         delete teacher._doc.password;
-        res.status(201).json({ teacher, token });
+        res.status(201).json({ teacher, token, role: "teacher" });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -58,6 +58,83 @@ export const profileController = async (req, res) => {
     console.log(teacher);
 
     res.status(200).json({ teacher: teacher });
+}
+
+export const completeProfileController = async (req, res) => {
+    try {
+        const { fullName, phoneNumber, gender, dateOfBirth, bio, profilePic, education, currentPosition, techStack, socialLinks } = req.body;
+        const teacher = await teacherService.findTeacher({ email: req.user?.email });
+        if (!teacher) {
+            return res.status(404).json({ error: 'No such account found' });
+        }
+
+        const updatedTeacher = await teacherService.updateTeacherProfile(teacher._id, {
+            profile: {
+                fullName,
+                phoneNumber,
+                gender,
+                dateOfBirth,
+                bio,
+                profilePic,
+                education,
+                currentPosition,
+                techStack: techStack,
+                socialLinks
+            },
+            isProfileComplete: true
+        },
+            { new: true }
+        );
+        console.log(updatedTeacher);
+
+        res.status(200).json({ message: 'Profile updated successfully', teacher: updatedTeacher });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const updateProfileController = async (req, res) => {
+    try {
+        const teacherId = req.user._id; // JWT middleware sets this
+        const teacher = await teacherModel.findById(teacherId);
+        console.log(teacher);
+
+        if (teacher.isProfileComplete === false) {
+            return res.status(400).json({ error: 'Please complete your profile first' });
+        }
+        const { fullName, phoneNumber, gender, dateOfBirth, bio, profilePic, education, currentPosition, techStack, socialLinks } = req.body;
+        const updatedTeacher = await teacherService.updateTeacherProfile(teacherId, {
+            profile: {
+                fullName,
+                phoneNumber,
+                gender,
+                dateOfBirth,
+                bio,
+                profilePic,
+                education,
+                currentPosition,
+                techStack: techStack,
+                socialLinks,
+            }
+        }, { new: true });
+
+        console.log(updatedTeacher);
+
+        res.status(200).json({ message: 'Profile updated successfully', teacher: updatedTeacher });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const getCreatedCourses = async (req, res) => {
+    const teacher = await teacherService.findTeacher({ email: req.user?.email });
+    console.log(teacher);
+    if (!teacher) {
+        return res.status(404).json({ error: 'No such account found' });
+    }
+
+    res.status(200).json({ courses: teacher.createdCourses });
 }
 
 export const getTeacherByIdController = async (req, res) => {

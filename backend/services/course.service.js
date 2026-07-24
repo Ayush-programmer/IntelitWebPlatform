@@ -21,7 +21,7 @@ export const createCourse = async ({ title, description, category, thumbnail, te
 
 export const findCourseById = async (courseId) => {
     try {
-        const Course = await courseModel.findById(courseId).populate('teacher', 'name email').populate('reviews.student', 'username email');
+        const Course = await courseModel.findById(courseId).populate('teacher', 'name email').populate('reviews.student', 'username email profile');
         if (!Course) {
             throw new Error("Course not found");
         }
@@ -83,5 +83,21 @@ export const deleteCourse = async (courseId, teacherId) => {
         return course;
     } catch (error) {
         throw new Error("Error deleting course: " + error.message);
+    }
+}
+
+// Add a review to a course
+export const addReview = async (courseId, studentId, rating, reviewText) => {
+    try {
+        const course = await courseModel.findById(courseId);
+        if (!course) {
+            throw new Error("Course not found");
+        }
+        const review = { student: studentId, rating, reviewText };
+        course.reviews.push(review);
+        await course.save();
+        return course;
+    } catch (error) {
+        throw new Error("Error adding review: " + error.message);
     }
 }

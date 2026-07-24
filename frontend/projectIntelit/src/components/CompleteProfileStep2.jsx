@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-const CompleteProfileStep2 = ({ formData, setFormData, nextStep, prevStep }) => {
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const CompleteProfileStep2 = ({ formData, handleChange, nextStep, prevStep }) => {
 
   return (
     <div className="step-container">

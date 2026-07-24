@@ -19,6 +19,7 @@ const Register = () => {
       console.log(res.data);
 
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.role);
       setTeacher(res.data.teacher);
 
       navigate('/teacherdashboard');

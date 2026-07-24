@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-const CompleteProfileStep1 = ({ formData, setFormData, nextStep }) => {
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const CompleteProfileStep1 = ({ formData, handleChange, nextStep }) => {
 
   return (
     <div className="step-container">
@@ -28,6 +25,9 @@ const CompleteProfileStep1 = ({ formData, setFormData, nextStep }) => {
         <input
           type="tel"
           name="phone"
+          min={10}
+          max={10}
+          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           value={formData.phone || ''}
           onChange={handleChange}
           placeholder="Enter your phone number"

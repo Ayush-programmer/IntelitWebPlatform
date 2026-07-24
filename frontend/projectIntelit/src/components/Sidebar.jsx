@@ -10,8 +10,8 @@ const Sidebar = ({ user }) => {
         </a>
       </div>
       <div className="profile">
-        <img src="allison-griffith-Q76DPRQ3Ix0-unsplash.jpg" alt="" className='profile-image' />
-        <div className="user-name">Scott M.</div>
+        <img src={user.profile?.profilePic} alt="" className='profile-image' />
+        <div className="user-name">{user?.profile.fullName?.split(' ')[0] || user?.username}</div>
       </div>
       <div className="sidebar-links">
         <div className="link">

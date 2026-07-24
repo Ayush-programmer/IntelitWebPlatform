@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from '../config/axios.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadThumbnailToCloudinary, uploadVideoToCloudinary } from '../utils/cloudinaryUtils.js';
@@ -12,8 +12,11 @@ import Step5ReviewSubmit from '../components/Step5ReviewSubmit.jsx';
 const CourseUpload = () => {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
+    const { courseId } = useParams();
+    const isEditMode = Boolean(courseId) // Track if editing an existing course
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [formData, setFormData] = useState({
         title: '',
@@ -33,6 +36,38 @@ const CourseUpload = () => {
         }],
     });
 
+    useEffect(() => {
+        // Check if we are in edit mode
+        if (isEditMode) {
+            fetchCourseData();
+        }
+    }, [location]);
+
+    const fetchCourseData = async () => {
+        try {
+            const res = await axios.get(`/courses/${courseId}`);
+            const course = res.data.course;
+            setFormData({
+                title: course.title,
+                description: course.description,
+                category: course.category,
+                price: course.price,
+                thumbnail: course.thumbnail,
+                topicsToLearn: course.topicsToLearn || [''],
+                materials: course.materials || [{ desc: '', fileURL: '' }],
+                references: course.references || [''],
+                faq: course.faq || [{ question: '', answer: '' }],
+                courseContents: course.courseContents || [{
+                    moduleTitle: '',
+                    lessons: [{ lessonTitle: '', videoURL: '', videoDuration: 0 }]
+                }],
+            });
+        } catch (err) {
+            console.error('Error fetching course data:', err);
+            alert('Failed to load course data. Please try again.');
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -43,6 +78,8 @@ const CourseUpload = () => {
         if (!file) return;
         try {
             const url = await uploadThumbnailToCloudinary(file);
+            console.log(url);
+
             setFormData({ ...formData, thumbnail: url });
         } catch (err) {
             console.error('Thumbnail upload error:', err);
@@ -54,25 +91,31 @@ const CourseUpload = () => {
         setLoading(true);
         try {
             const data = await uploadVideoToCloudinary(file);
-            const updatedContent = [...formData.courseContents];
-            updatedContent[moduleIndex].lessons[lessonIndex].videoURL = data.url;
-            updatedContent[moduleIndex].lessons[lessonIndex].videoDuration = data.duration;
-            setFormData({ ...formData, courseContents: updatedContent });
+            setFormData(prevFormData => {
+                const updatedContent = [...formData.courseContents];
+                updatedContent[moduleIndex].lessons[lessonIndex].videoURL = data.url;
+                updatedContent[moduleIndex].lessons[lessonIndex].videoDuration = data.duration;
+                return { ...prevFormData, courseContents: updatedContent }
+            });
         } catch (err) {
             console.error('Video upload error:', err);
         }
         setLoading(false);
     };
 
-    const nextStep = () => setStep(step + 1);
+    const nextStep = () => {
+        console.log(formData);
+
+        setStep(step + 1)
+    };
     const prevStep = () => setStep(step - 1);
 
     const addTopic = () => {
-        setFormData({ ...formData, topicsToLearn: [...formData.topicsToLearn, '']})
+        setFormData({ ...formData, topicsToLearn: [...formData.topicsToLearn, ''] })
     }
 
     const addMaterial = () => {
-        setFormData({ ...formData, materials: [...formData.materials, { desc: '', fileURL: ''}] });
+        setFormData({ ...formData, materials: [...formData.materials, { desc: '', fileURL: '' }] });
     };
 
     const addReference = () => {
@@ -91,15 +134,17 @@ const CourseUpload = () => {
     };
 
     const addLesson = (moduleIndex) => {
-        const updatedContent = [...formData.content];
+        const updatedContent = [...formData.courseContents];
         updatedContent[moduleIndex].lessons.push({ title: '', videoUrl: '', videoDuration: 0 });
-        setFormData({ ...formData, content: updatedContent });
+        setFormData({ ...formData, courseContents: updatedContent });
     };
 
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            const res = await axios.post('/courses/create', formData);
+            const res = isEditMode
+                ? await axios.put(`/courses/update/${courseId}`, formData)
+                : await axios.post('/courses/create', formData);
             alert('Course uploaded successfully!');
             navigate('/teacherdashboard')
         } catch (err) {

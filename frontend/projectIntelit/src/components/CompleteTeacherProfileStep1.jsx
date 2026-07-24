@@ -1,35 +1,41 @@
 import React from 'react';
 
-const CompleteTeacherProfileStep1 = ({ formData, setFormData, nextStep }) => {
+const CompleteTeacherProfileStep1 = ({ formData, handleChange, nextStep }) => {
   return (
-    <div className="teacher-step teacher-step-one">
-      <h2>Personal Details</h2>
+    <div className="step-form teacher-profile-card">
+      <h2 className='teacher-profile-title'>Personal Details</h2>
 
-      <div className="form-group">
+      <div className="input-group">
         <label>Full Name</label>
         <input
           type="text"
+          name='fullName'
           value={formData.fullName}
-          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+          onChange={handleChange}
           placeholder="Enter your full name"
         />
       </div>
 
-      <div className="form-group">
+      <div className="input-group">
         <label>Phone Number</label>
         <input
           type="tel"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          name='phoneNumber'
+          min={10}
+          max={10}
+          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          value={formData.phoneNumber}
+          onChange={handleChange}
           placeholder="Enter your phone number"
         />
       </div>
 
-      <div className="form-group">
+      <div className="input-group">
         <label>Gender</label>
         <select
           value={formData.gender}
-          onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+          name='gender'
+          onChange={handleChange}
         >
           <option value="">Select Gender</option>
           <option value="male">Male</option>
@@ -39,16 +45,17 @@ const CompleteTeacherProfileStep1 = ({ formData, setFormData, nextStep }) => {
         </select>
       </div>
 
-      <div className="form-group">
+      <div className="input-group">
         <label>Date of Birth</label>
         <input
           type="date"
+          name='dateOfBirth'
           value={formData.dateOfBirth}
-          onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+          onChange={handleChange}
         />
       </div>
 
-      <div className="form-navigation">
+      <div className="button-group one-btn">
         <button onClick={nextStep} className="next-btn">Next</button>
       </div>
     </div>

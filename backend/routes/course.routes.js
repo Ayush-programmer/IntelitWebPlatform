@@ -17,4 +17,6 @@ router.put('/update/:courseId', authUser, authorizeRole("teacher"), courseContro
 
 router.delete('/delete/:courseId', authUser, authorizeRole("teacher"), courseController.deleteCourse);
 
+router.post('/add-review', authUser, courseController.addReview);
+
 export default router;

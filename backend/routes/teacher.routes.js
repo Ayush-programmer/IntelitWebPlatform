@@ -17,6 +17,14 @@ router.post('/login',
 
 router.get('/profile', authMiddleware.authUser, teacherController.profileController);
 
+router.post('/completeprofile',
+     authMiddleware.authUser,
+     teacherController.completeProfileController);
+
+router.put('/updateprofile', authMiddleware.authUser, teacherController.updateProfileController);
+
+router.get('/createdcourses', authMiddleware.authUser, teacherController.getCreatedCourses);
+
 router.get('/logout', authMiddleware.authUser, teacherController.logoutController);
 
 router.get('/all', authMiddleware.authUser, teacherController.getAllTeachers);

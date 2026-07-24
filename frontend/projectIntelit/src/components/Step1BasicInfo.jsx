@@ -3,6 +3,7 @@ import React from "react";
 const Step1BasicInfo = ({
     formData,
     handleChange,
+    setFormData,
     handleThumbnailUpload,
     loading,
     nextStep
@@ -16,7 +17,7 @@ const Step1BasicInfo = ({
                     <input
                         type="text"
                         name="title"
-                        value={formData.title}
+                        value={formData.title || ''}
                         onChange={handleChange}
                         placeholder="Enter course title"
                         className="input"
@@ -29,7 +30,7 @@ const Step1BasicInfo = ({
                     <label htmlFor="desc" className="label">Description</label>
                     <textarea
                         name="description"
-                        value={formData.description}
+                        value={formData.description || ''}
                         onChange={handleChange}
                         placeholder="Enter a short description"
                         className="textarea"
@@ -42,7 +43,7 @@ const Step1BasicInfo = ({
                     <label htmlFor="category" className="label">Category</label>
                     <input
                         name="category"
-                        value={formData.category}
+                        value={formData.category || ''}
                         onChange={handleChange}
                         placeholder="Enter the course category"
                         className="category"
@@ -55,7 +56,7 @@ const Step1BasicInfo = ({
                     <label htmlFor="price" className="label">Price</label>
                     <input
                         name="price"
-                        value={formData.price}
+                        value={formData.price || ''}
                         onChange={handleChange}
                         placeholder="Set a price for the course"
                         className="price"
@@ -73,16 +74,9 @@ const Step1BasicInfo = ({
                     />
                     {loading && <div className="loader">Uploading...</div>}
 
-                    {formData.thumbnail && (
-                        <img
-                            src={formData.thumbnail}
-                            alt="Thumbnail Preview"
-                            className="thumbnail-preview"
-                        />
-                    )}
                 </div>
                 <div className="navigation-buttons one-row">
-                    <button className="add-btn" onClick={nextStep}>
+                    <button type="button" className="nav-btn next-btn" onClick={nextStep}>
                         Next
                     </button>
                 </div>

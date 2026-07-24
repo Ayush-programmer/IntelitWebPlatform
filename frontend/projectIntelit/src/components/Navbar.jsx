@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import UserAuth from '../Auth/Userauth';
 
 const Navbar = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [dashbordLink, setDashboardLink] = useState('');
   const [showSidebar, setShowSidebar] = useState(false);
 
   console.log(showSidebar);
@@ -13,10 +14,17 @@ const Navbar = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
-    if (!token || role !== 'student') {
+    if (!token) {
       setIsAuthenticated(false)
     } else {
       setIsAuthenticated(true);
+    }
+    if (role === 'teacher') {
+      setDashboardLink('/teacherdashboard');
+    } else if (role === 'student') {
+      setDashboardLink('/userdashboard');
+    } else {
+      setDashboardLink('');
     }
   });
 
@@ -28,16 +36,17 @@ const Navbar = () => {
     <div>
       <nav className="navbar">
         <div className="container">
-          <a className="brand-logo" href="#">
+          <a className="brand-logo" href="/">
             Intelit
           </a>
           <div className={`side-wrapper ${showSidebar ? "show" : ""}`}>
             <i className="fa-solid fa-close" onClick={() => setShowSidebar(false)}></i>
             <div className="navbar-links">
-              <Link className="navbar-link active" to="/">Home</Link>
-              <Link className="navbar-link" to="/about">About</Link>
-              <Link className="navbar-link" to="/browsecourses">Courses</Link>
-              <Link className="navbar-link" to="/contact">Contact Us</Link>
+              <NavLink className="navbar-link" to="/">Home</NavLink>
+              <NavLink className="navbar-link" to="/about">About</NavLink>
+              <NavLink className="navbar-link" to="/browsecourses">Courses</NavLink>
+              <NavLink className="navbar-link" to="/contact">Contact Us</NavLink>
+              {isAuthenticated && <NavLink className="navbar-link" to={dashbordLink}>Dashboard</NavLink>}
             </div>
           </div>
 

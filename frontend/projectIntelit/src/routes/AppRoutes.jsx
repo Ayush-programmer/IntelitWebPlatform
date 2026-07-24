@@ -37,10 +37,13 @@ const AppRoutes = () => {
                 <Route path='/teacherlogout' element={<TeacherProtectedWrapper><TeacherLogout /></TeacherProtectedWrapper>} />
                 <Route path='/userdashboard' element={<UserProtectedWrapper><UserDashboard /></UserProtectedWrapper>} />
                 <Route path='/completeprofile' element={<UserProtectedWrapper><CompleteProfile /></UserProtectedWrapper>} />
+                <Route path='/updateprofile' element={<UserProtectedWrapper><CompleteProfile /></UserProtectedWrapper>} />
                 <Route path='/teacherdashboard' element={<TeacherProtectedWrapper><TeacherDashboard /></TeacherProtectedWrapper>} />
                 <Route path='/completeteacherprofile' element={<CompleteTeacherProfile />} />
+                <Route path='/updateteacherprofile' element={<CompleteTeacherProfile />} />
                 <Route path='/course/:courseId' element={<Course />} />
                 <Route path='/uploadcourse' element={<TeacherProtectedWrapper><CourseUpload /></TeacherProtectedWrapper>} />
+                <Route path='/editcourse/:courseId' element={<TeacherProtectedWrapper><CourseUpload /></TeacherProtectedWrapper>} />
                 <Route path='/enroll/:id' element={<UserProtectedWrapper><EnrollPage /></UserProtectedWrapper>} />
                 <Route path='/payment-success/:courseId' element={<UserProtectedWrapper><PaymentSuccessPage /></UserProtectedWrapper>} />
             </Routes>

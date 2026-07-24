@@ -1,4 +1,5 @@
 import * as courseService from '../services/course.service.js';
+import teacherModel from '../models/teacher.model.js';
 
 export const createCourse = async (req, res) => {
     try {
@@ -27,6 +28,13 @@ export const createCourse = async (req, res) => {
             materials,
             enrolledStudents
         });
+
+        // Update the teacher's courseCreated field with the new course ID
+        await teacherModel.findByIdAndUpdate(
+            req.user._id,
+            { $push: { createdCourses: newCourse._id } },
+            { new: true }
+        );
 
         console.log(newCourse);
 
@@ -83,7 +91,9 @@ export const getAllCourses = async (req, res) => {
 export const updateCourse = async (req, res) => {
     try {
         const { courseId } = req.params;
-        const { title, description, category, price, courseContents, topicsToLearn, faq, references, materials, reviews } = req.body;
+        const { title, description, category, price, thumbnail, courseContents, topicsToLearn, faq, references, materials } = req.body;
+        console.log(topicsToLearn);
+        
 
         if (!title || !description || !category ) {
             return res.status(400).json({ error: "Title, description, category, and price are required." });
@@ -94,6 +104,7 @@ export const updateCourse = async (req, res) => {
             description,
             category,
             price,
+            thumbnail,
             courseContents,
             topicsToLearn,
             faq,
@@ -129,3 +140,23 @@ export const deleteCourse = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const addReview = async (req, res) => {
+    try {
+        const { courseId, student, rating, reviewText } = req.body;
+
+        if (!courseId || !student || !rating || !reviewText) {
+            return res.status(400).json({ error: "Course ID, student ID, rating, and review text are required." });
+        }
+
+        const updatedCourse = await courseService.addReview(courseId, student, rating, reviewText);
+
+        if (!updatedCourse) {
+            return res.status(404).json({ error: "Course not found" });
+        }
+
+        res.status(200).json({ message: "Review added successfully", course: updatedCourse });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}

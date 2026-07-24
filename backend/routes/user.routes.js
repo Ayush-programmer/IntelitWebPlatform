@@ -21,6 +21,10 @@ router.get('/profile/:id', authMiddleware.authUser, userController.profileByIdCo
 
 router.post('/complete-profile', authMiddleware.authUser, userController.completeProfileController);
 
+router.put('/update-profile', authMiddleware.authUser, userController.updateProfileController);
+
+router.get('/enrolledcourses', authMiddleware.authUser, userController.getEnrolledCourses);
+
 router.get('/logout', authMiddleware.authUser, userController.logoutController);
 
 router.get('/all', authMiddleware.authUser, userController.getAllUsersController);

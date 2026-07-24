@@ -14,10 +14,10 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
     };
 
     return (
-        <div className="teacher-step teacher-step-three">
-            <h2>Finish Your Profile</h2>
+        <div className="step-form teacher-profile-card">
+            <h2 className='teacher-profile-title'>Finish Your Profile</h2>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>Upload Profile Picture</label>
                 <input type="file" accept="image/*" onChange={handleImageUpload} />
                 {formData.profilePic && (
@@ -29,7 +29,7 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
                 )}
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>GitHub</label>
                 <input
                     type="text"
@@ -47,17 +47,17 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
                 />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>LinkedIn</label>
                 <input
                     type="text"
-                    value={formData.socialLinks.linkedin}
+                    value={formData.socialLinks.linkedIn}
                     onChange={(e) =>
                         setFormData({
                             ...formData,
                             socialLinks: {
                                 ...formData.socialLinks,
-                                linkedin: e.target.value,
+                                linkedIn: e.target.value,
                             },
                         })
                     }
@@ -65,25 +65,25 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
                 />
             </div>
 
-            <div className="form-group">
-                <label>Portfolio</label>
+            <div className="input-group">
+                <label>Twitter</label>
                 <input
                     type="text"
-                    value={formData.socialLinks.portfolio}
+                    value={formData.socialLinks.twitter}
                     onChange={(e) =>
                         setFormData({
                             ...formData,
                             socialLinks: {
                                 ...formData.socialLinks,
-                                portfolio: e.target.value,
+                                twitter: e.target.value,
                             },
                         })
                     }
-                    placeholder="https://yourportfolio.com"
+                    placeholder="https://twitter.com/username"
                 />
             </div>
 
-            <div className="form-navigation">
+            <div className="button-group">
                 <button onClick={prevStep} className="prev-btn">Previous</button>
                 <button onClick={handleSubmit} className="submit-btn">Submit</button>
             </div>

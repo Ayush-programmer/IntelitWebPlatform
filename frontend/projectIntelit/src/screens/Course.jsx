@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { use, useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from '../config/axios.js'
 import Sidebar from '../components/Sidebar.jsx';
@@ -21,7 +21,7 @@ const Course = () => {
         setShowSidebar(prev => !prev);
     };
 
-    const { user, isLoading, fetchUserData } = useContext(UserContext);
+    const { user, role, isLoading, fetchUserData } = useContext(UserContext);
 
     useEffect(() => {
         axios.get(`/courses/${courseId}`)
@@ -55,12 +55,16 @@ const Course = () => {
     }, [user, fetchUserData])
 
     useEffect(() => {
-        if(user) {
-            setStudentEnrolled(user?.enrolledCourses.flat().some(id => id.toString() === courseId));
+        if (user) {
+            setStudentEnrolled(
+                user?.enrolledCourses.some(course => course._id.toString() === courseId)
+            );
+            console.log("Student enrolled:", studentEnrolled);
+            console.log(courseId);
+
+            
         }
     }, [user, courseId]);
-
-    
 
     if (isLoading && !user) {
         return <div>Loading...</div>;
@@ -87,16 +91,15 @@ const Course = () => {
                         {user && <Sidebar user={user} />}
                     </div>
 
-
                     {/* Main course content section */}
                     <div className="course-div">
                         {/* Top bar displaying course navigation and details */}
                         <div className='top-bar'>
                             <div className="up-div">
                                 <i className="fa-solid fa-user-graduate icon"></i>
-                                <span>&nbsp;&nbsp;Courses&nbsp; /&nbsp; </span>
-                                <span>{course.category}&nbsp; /&nbsp; </span>
-                                <span>{course.title}</span>
+                                <Link to='/browsecourses'><span>&nbsp;&nbsp;Courses</span>/</Link>
+                                <Link to=''><span>{course.category}</span>/</Link>
+                                <Link to=''><span>{course.title}</span></Link>
                             </div>
                             <div className="down-div">
                                 <div className="left">
@@ -124,8 +127,8 @@ const Course = () => {
                                 <div className="right">
                                     {/* Enroll button */}
                                     {
-                                        !studentEnrolled &&
-                                            <Link to={`/enroll/${course._id}`} className="btn-primary-col enroll-btn">Enroll Now</Link>
+                                        role !== "teacher" && !studentEnrolled &&
+                                        <Link to={`/enroll/${course._id}`} className="btn-primary-col enroll-btn">Enroll Now</Link>
                                     }
                                 </div>
                             </div>
@@ -139,12 +142,12 @@ const Course = () => {
                                 </div>
                                 <div className="course-desc-div">
                                     {/* Tabs for course description and additional details */}
-                                    <CourseTabs course={course} />
+                                    <CourseTabs user={user} course={course} studentEnrolled={studentEnrolled} />
                                 </div>
                             </div>
                             <div className="content-div">
                                 {/* Course contents and modules */}
-                                {course.courseContents && <CourseContents courseModules={course.courseContents} setIndices={setIndices} user={user} courseId={courseId} />}
+                                {course.courseContents && <CourseContents courseModules={course.courseContents} setIndices={setIndices} user={user} studentEnrolled={studentEnrolled} />}
                             </div>
                         </div>
                     </div>

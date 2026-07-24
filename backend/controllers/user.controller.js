@@ -2,6 +2,7 @@ import userModel from "../models/user.model.js";
 import * as userService from '../services/user.service.js';
 import { validationResult } from 'express-validator';
 import redisClient from "../services/redis.service.js";
+import User from "../models/user.model.js";
 
 export const createUserController = async (req, res) => {
     const errors = validationResult(req);
@@ -81,13 +82,10 @@ export const completeProfileController = async (req, res) => {
             currentStatus,
             socialLinks,
         } = req.body;
-        console.log(req.body);
-        console.log(req.user);
 
         const user = await userModel.findOne({ _id: userId });
 
         console.log(user);
-
 
         const updatedUser = await userModel.findByIdAndUpdate(
             userId,
@@ -109,13 +107,74 @@ export const completeProfileController = async (req, res) => {
         );
         console.log(updatedUser);
 
-
         res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Something went wrong' });
     }
 };
+
+export const updateProfileController = async (req, res) => {
+    try {
+        const userId = req.user._id; // JWT middleware ne yeh set kiya
+        console.log(userId);
+        const user = await userModel.findById(userId);
+        console.log(req.user);
+
+        if (user.isProfileComplete === false) {
+            return res.status(400).json({ message: 'Please complete your profile first' });
+        }
+        const {
+            fullName,
+            phone,
+            gender,
+            dateOfBirth,
+            bio,
+            profilePic,
+            interests,
+            currentStatus,
+            socialLinks,
+        } = req.body;
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            {
+                profile: {
+                    fullName,
+                    phone,
+                    gender,
+                    dateOfBirth,
+                    bio,
+                    profilePic,
+                    interests,
+                    currentStatus,
+                    socialLinks,
+                },
+                isProfileComplete: true
+            },
+            { new: true }
+        );
+        console.log(updatedUser);
+
+        res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+}
+
+export const getEnrolledCourses = async (req, res) => {
+    try {
+        const user = await userService.findUser({ email: req.user.email });
+
+        console.log(user);
+
+        res.status(200).json({ enrolledCourses: user.enrolledCourses });
+    } catch (error) {
+        console.log('error fecthing enrolled courses');
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
 export const logoutController = async (req, res) => {
     try {

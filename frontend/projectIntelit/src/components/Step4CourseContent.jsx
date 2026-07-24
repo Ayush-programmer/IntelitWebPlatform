@@ -14,7 +14,7 @@ const Step4CourseContent = ({
     const handleModuleTitleChange = (index, value) => {
         const updatedContent = [...formData.courseContents];
         updatedContent[index].moduleTitle = value;
-        setFormData({ ...formData, content: updatedContent });
+        setFormData({ ...formData, courseContents: updatedContent });
     };
 
     const handleLessonChange = (moduleIndex, lessonIndex, field, value) => {
@@ -47,7 +47,7 @@ const Step4CourseContent = ({
                         <input
                             type="text"
                             placeholder={`Module ${moduleIndex + 1} Title`}
-                            value={module.moduleTitle}
+                            value={module.moduleTitle || ''}
                             onChange={(e) => handleModuleTitleChange(moduleIndex, e.target.value)}
                         />
 
@@ -64,7 +64,7 @@ const Step4CourseContent = ({
                                     <input
                                         type="text"
                                         placeholder={`Lesson ${lessonIndex + 1} Title`}
-                                        value={lesson.lessonTitle}
+                                        value={lesson.lessonTitle || ''}
                                         onChange={(e) =>
                                             handleLessonChange(moduleIndex, lessonIndex, 'lessonTitle', e.target.value)
                                         }

@@ -6,25 +6,29 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
     const handlePositionChange = (e) => {
         const value = e.target.value;
         setFormData({ ...formData, currentPosition: value });
-        setShowOtherInput(value === 'Other');
+        // setShowOtherInput(value === 'Other');
     };
 
     const handleTechStackChange = (e) => {
-        const value = e.target.value;
-        let newStack = [...formData.techStack];
-        if (newStack.includes(value)) {
-            newStack = newStack.filter((item) => item !== value);
+        const { value, checked } = e.target;
+        if (checked) {
+            setFormData({
+                ...formData,
+                techStack: [...formData.techStack, value],
+            });
         } else {
-            newStack.push(value);
+            setFormData({
+                ...formData,
+                techStack: formData.techStack.filter((tech) => tech !== value),
+            });
         }
-        setFormData({ ...formData, techStack: newStack });
     };
-
+    
     return (
-        <div className="teacher-step teacher-step-two">
-            <h2>Professional Details</h2>
+        <div className="step-form teacher-profile-card">
+            <h2 className='teacher-profile-title'>Professional Details</h2>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>Bio</label>
                 <textarea
                     rows="4"
@@ -34,17 +38,17 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
                 ></textarea>
             </div>
 
-            <div className="form-group">
-                <label>Expertise</label>
+            <div className="input-group">
+                <label>Education</label>
                 <input
                     type="text"
-                    value={formData.expertise}
-                    onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
-                    placeholder="e.g. Full Stack, Machine Learning"
+                    value={formData.education}
+                    onChange={(e) => setFormData({ ...formData, education: e.target.value })}
+                    placeholder="e.g. Bsc, BTech, Msc, ME, PhD, etc."
                 />
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>Current Position</label>
                 <select value={formData.currentPosition} onChange={handlePositionChange}>
                     <option value="">Select</option>
@@ -53,7 +57,7 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
                     <option value="Freelancer">Freelancer</option>
                     <option value="Other">Other</option>
                 </select>
-                {showOtherInput && (
+                {/* {showOtherInput && (
                     <input
                         type="text"
                         placeholder="Enter your position"
@@ -62,10 +66,10 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
                             setFormData({ ...formData, currentPositionOther: e.target.value })
                         }
                     />
-                )}
+                )} */}
             </div>
 
-            <div className="form-group">
+            <div className="input-group">
                 <label>Tech Stack</label>
                 <div className="checkbox-group">
                     {['React', 'Node.js', 'Python', 'Java', 'C++', 'MongoDB', 'AWS'].map((tech) => (
@@ -82,7 +86,7 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
                 </div>
             </div>
 
-            <div className="form-navigation">
+            <div className="button-group">
                 <button onClick={prevStep} className="prev-btn">Previous</button>
                 <button onClick={nextStep} className="next-btn">Next</button>
             </div>

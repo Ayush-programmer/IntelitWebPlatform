@@ -1,10 +1,38 @@
 import React, { useState } from 'react';
 import { FaUser, FaQuestionCircle, FaBook, FaStar, FaInfoCircle, FaListUl, FaCheckCircle, FaUserCircle, FaChalkboardTeacher, FaChevronDown, FaChevronUp, FaLink } from 'react-icons/fa';
 import { MdCategory } from 'react-icons/md';
+import axios from '../config/axios.js';
 
-const CourseTabs = ({ course }) => {
+const CourseTabs = ({ user, course, studentEnrolled }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+
+  const handleSubmitReview = async () => {
+    if (!rating || !reviewText.trim()) {
+      alert("Please provide both rating and review text.");
+      return;
+    }
+
+    const newReview = {
+      courseId: course._id,
+      student: user._id,
+      rating,
+      reviewText: reviewText,
+    };
+
+    try {
+      const res = await axios.post('/courses/add-review', newReview);
+      alert('Review Added!');
+    } catch (err) {
+      console.error('Submission error:', err);
+    }
+
+    setRating(0);
+    setReviewText("");
+  };
+
 
   const renderContent = () => {
     switch (activeTab) {
@@ -113,12 +141,38 @@ const CourseTabs = ({ course }) => {
         return (
           <div className="review-section">
             <h3><FaStar color="#785cf4" /> Reviews</h3>
+
+            {/* Write Review Section */}
+            {studentEnrolled && <div className="write-review">
+              <h4>Write a Review</h4>
+              <div className="rating-input">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FaStar
+                    key={star}
+                    onClick={() => setRating(star)}
+                    color={star <= rating ? "#785cf4" : "#ccc"}
+                    size={25}
+                    style={{ cursor: "pointer" }}
+                  />
+                ))}
+              </div>
+              <textarea
+                placeholder="Share your thoughts about this course..."
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+              ></textarea>
+              <button onClick={handleSubmitReview}>Submit Review</button>
+            </div>}
+
+            {/* Existing Reviews */}
             {course.reviews && course.reviews.length > 0 ? (
               course.reviews.map((review, index) => (
                 <div key={index} className="review-card">
                   <div className="review-header">
-                    <FaUserCircle size={24} color="#785cf4" />
-                    <span className="reviewer-name">{review.name || "Anonymous"}</span>
+                    <div className="profile-image">
+                      <img src={review.student.profile?.profilePic} alt="" />
+                    </div>
+                    <span className="reviewer-name">{review.student.profile?.fullName || review.student.username}</span>
                   </div>
                   <div className="review-stars">
                     {[...Array(5)].map((_, i) => (
@@ -129,13 +183,14 @@ const CourseTabs = ({ course }) => {
                       />
                     ))}
                   </div>
-                  {review.text && <p className="review-text">{review.text}</p>}
+                  {review.reviewText && <p className="review-text">{review.reviewText}</p>}
                 </div>
               ))
             ) : (
               <p className="no-reviews">No reviews yet.</p>
             )}
           </div>
+
         );
 
       default:

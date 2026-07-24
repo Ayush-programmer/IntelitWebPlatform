@@ -6,7 +6,7 @@ import Footer from '../components/Footer'
 const Home = () => {
   return (
     <div>
-      <div classNameName="app">
+      <div className="app">
         <Navbar />
         <section className="hero">
           <div className="container">
@@ -88,7 +88,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="smart-edu">
+        <section className="smart-edu"> 
           <div className="container">
             <div className="description" data-aos="fade-right">
               <h2>Our Education Is Smart And Effective</h2>
