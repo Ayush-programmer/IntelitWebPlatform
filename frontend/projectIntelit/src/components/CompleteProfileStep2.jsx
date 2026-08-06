@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const CompleteProfileStep2 = ({ formData, handleChange, nextStep, prevStep }) => {
+const CompleteProfileStep2 = ({ formData, handleChange, nextStep, prevStep, errors }) => {
 
   return (
     <div className="step-container">
@@ -17,6 +17,8 @@ const CompleteProfileStep2 = ({ formData, handleChange, nextStep, prevStep }) =>
           onChange={handleChange}
           required
         />
+        {errors.dateOfBirth &&
+          <p className='error'>{errors.dateOfBirth}</p>}
       </div>
 
       <div className="form-group">
@@ -29,13 +31,15 @@ const CompleteProfileStep2 = ({ formData, handleChange, nextStep, prevStep }) =>
           placeholder="Tell us something about yourself"
           required
         />
+        {errors.bio &&
+          <p className='error'>{errors.bio}</p>}
       </div>
 
       <div className="button-group">
-        <button onClick={prevStep} className="prev-btn">
+        <button type='button' onClick={prevStep} className="prev-btn">
           Previous
         </button>
-        <button onClick={nextStep} className="next-btn">
+        <button type='button' onClick={nextStep} className="next-btn">
           Next
         </button>
       </div>

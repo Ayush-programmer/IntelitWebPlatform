@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CompleteTeacherProfileStep1 = ({ formData, handleChange, nextStep }) => {
+const CompleteTeacherProfileStep1 = ({ formData, handleChange, nextStep, errors }) => {
   return (
     <div className="step-form teacher-profile-card">
       <h2 className='teacher-profile-title'>Personal Details</h2>
@@ -14,6 +14,8 @@ const CompleteTeacherProfileStep1 = ({ formData, handleChange, nextStep }) => {
           onChange={handleChange}
           placeholder="Enter your full name"
         />
+        {errors.fullName &&
+          <p className='error'>{errors.fullName}</p>}
       </div>
 
       <div className="input-group">
@@ -28,6 +30,8 @@ const CompleteTeacherProfileStep1 = ({ formData, handleChange, nextStep }) => {
           onChange={handleChange}
           placeholder="Enter your phone number"
         />
+        {errors.phoneNumber &&
+          <p className='error'>{errors.phoneNumber}</p>}
       </div>
 
       <div className="input-group">

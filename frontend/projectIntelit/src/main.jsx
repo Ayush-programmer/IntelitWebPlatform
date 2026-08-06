@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <TeacherContext>
       <UserContext>
-          <App />
+        <App />
       </UserContext>
     </TeacherContext>
   </StrictMode>,

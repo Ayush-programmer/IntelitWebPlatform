@@ -2,13 +2,11 @@ import courseModel from "../models/course.model.js";
 
 // Create new course
 
-export const createCourse = async ({ title, description, category, thumbnail, teacherId,  topicsToLearn = [], faq = [], references = [], materials = [], courseContents = [], price = 0, reviews = [], enrolledStudents = [] }) => {
+export const createCourse = async ({ title, description, category, thumbnail, teacherId, topicsToLearn = [], faq = [], references = [], materials = [], courseContents = [], price = 0, reviews = [], enrolledStudents = [] }) => {
     if (!title || !description || !category || !teacherId || !thumbnail) {
         throw new Error("Title, description, category and teacherId and thumbnail are required");
     }
 
-    console.log("Creating course with data: ", { title, description, category, teacherId, thumbnail, materials, topicsToLearn, faq, references, courseContents, price, reviews, enrolledStudents });
-    
     try {
         const course = await courseModel.create({ title, description, category, thumbnail, teacher: teacherId, materials, topicsToLearn, faq, references, price, courseContents, reviews, enrolledStudents });
         return course;
@@ -21,7 +19,7 @@ export const createCourse = async ({ title, description, category, thumbnail, te
 
 export const findCourseById = async (courseId) => {
     try {
-        const Course = await courseModel.findById(courseId).populate('teacher', 'name email').populate('reviews.student', 'username email profile');
+        const Course = await courseModel.findById(courseId).populate('teacher', 'name email profile').populate('reviews.student', 'username email profile');
         if (!Course) {
             throw new Error("Course not found");
         }
@@ -35,9 +33,9 @@ export const findCourseById = async (courseId) => {
 
 export const getAllCourses = async () => {
     console.log('Fetching all courses...');
-    
+
     try {
-        const courses = await courseModel.find().populate('teacher', 'name email').populate('reviews.student', 'username email');
+        const courses = await courseModel.find().populate('teacher', 'name email profile').populate('reviews.student', 'username email');
         return courses;
     } catch (error) {
         throw new Error("Error fetching courses: " + error.message);
@@ -57,10 +55,11 @@ export const getAllCoursesByTeacher = async (teacherId) => {
 
 // Update a course only if the teacher is owner of the course
 
-export const updateCourse = async (courseId, teacherId, { title, description, category, materials, topicsToLearn : [], faq : [], references : [], price, courseContents, reviews }) => {
+export const updateCourse = async (courseId, teacherId, { title, description, category, materials, topicsToLearn = [], faq = [], references = [], price, courseContents, reviews }) => {
     if (!title || !description || !category || !teacherId) {
         throw new Error("Title, description, category and teacherId are required");
     }
+
     try {
         const course = await courseModel.findOneAndUpdate({ _id: courseId, teacher: teacherId }, { title, description, category, materials, topicsToLearn, faq, references, price, courseContents, reviews }, { new: true });
         if (!course) {

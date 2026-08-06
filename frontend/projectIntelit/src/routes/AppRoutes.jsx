@@ -1,5 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast';
+
 import Login from '../screens/Login.jsx'
 import Register from '../screens/Register.jsx'
 import Logout from '../screens/Logout.jsx'
@@ -24,6 +26,16 @@ import CompleteTeacherProfile from '../screens/CompleteTeacherProfile.jsx'
 const AppRoutes = () => {
     return (
         <BrowserRouter>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                    duration: 3000,
+                    style: {
+                        borderRadius: '10px',
+                    },
+                }}
+            />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />

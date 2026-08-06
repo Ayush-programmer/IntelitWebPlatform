@@ -1,17 +1,16 @@
 import * as courseService from '../services/course.service.js';
 import teacherModel from '../models/teacher.model.js';
+import cloudinary from '../db/cloudinary.js';
 
 export const createCourse = async (req, res) => {
     try {
         console.log(req.body);
-        
+
         const { title, description, category, price, thumbnail, courseContents, topicsToLearn, faq, references, materials, reviews, enrolledStudents } = req.body;
 
         if (!title || !description || !category || !thumbnail) {
             return res.status(400).json({ error: "Title, description, category, and thumbnail are required." });
         }
-
-        console.log(req.user);
 
         const newCourse = await courseService.createCourse({
             title,
@@ -48,8 +47,6 @@ export const createCourse = async (req, res) => {
 
 export const getCourseById = async (req, res) => {
     try {
-        console.log('controllers course.controller.js getCourseById called');
-        
         const { courseId } = req.params;
         const course = await courseService.findCourseById(courseId);
 
@@ -64,8 +61,6 @@ export const getCourseById = async (req, res) => {
 }
 
 export const getAllCoursesByTeacher = async (req, res) => {
-    console.log(req.user);
-    
     try {
         const teacherId = req.user._id;
         const courses = await courseService.getAllCoursesByTeacher(teacherId);
@@ -76,12 +71,9 @@ export const getAllCoursesByTeacher = async (req, res) => {
 }
 
 export const getAllCourses = async (req, res) => {
-    console.log('controllers course.controller.js getAllCourses called');
-    
     try {
         const courses = await courseService.getAllCourses();
-        console.log(courses);
-        
+
         res.status(200).json({ courses });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -92,10 +84,8 @@ export const updateCourse = async (req, res) => {
     try {
         const { courseId } = req.params;
         const { title, description, category, price, thumbnail, courseContents, topicsToLearn, faq, references, materials } = req.body;
-        console.log(topicsToLearn);
-        
 
-        if (!title || !description || !category ) {
+        if (!title || !description || !category) {
             return res.status(400).json({ error: "Title, description, category, and price are required." });
         }
 
@@ -158,5 +148,36 @@ export const addReview = async (req, res) => {
         res.status(200).json({ message: "Review added successfully", course: updatedCourse });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+}
+
+export const deleteVideos = async (req, res) => {
+    try {
+        const { publicIds } = req.body;
+
+        if (!Array.isArray(publicIds) || publicIds.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "publicIds must be a non-empty array."
+            });
+        }
+
+        const results = await Promise.allSettled(
+            publicIds.map(publicId =>
+                cloudinary.uploader.destroy(publicId, {
+                    resource_type: "video"
+                })
+            )
+        );
+
+        res.status(200).json({
+            success: true,
+            results
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
     }
 }

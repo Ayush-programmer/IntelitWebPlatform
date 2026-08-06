@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { IoMdClose } from 'react-icons/io';
+
 const Step2Resources = ({
     formData,
     setFormData,
@@ -9,24 +11,108 @@ const Step2Resources = ({
     addTopic,
     prevStep,
     nextStep,
+    errors,
+    setErrors
 }) => {
 
     const handleTopicsChange = (index, value) => {
         const updatedTopics = [...formData.topicsToLearn];
         updatedTopics[index] = value;
-        setFormData({ ...formData, topicsToLearn: updatedTopics});
+        setFormData({ ...formData, topicsToLearn: updatedTopics });
+
+        let error = "";
+
+        if (value.length > 200) {
+            error = "Topic is too large";
+        }
+
+        setErrors(prev => ({
+            ...prev,
+            [`topic-${index}`]: error
+        }));
     }
+
+    const removeTopic = (index) => {
+        const updatedTopics = formData.topicsToLearn.filter((_, i) => i !== index);
+
+        setFormData(prev => ({
+            ...prev,
+            topicsToLearn: updatedTopics
+        }));
+
+        setErrors(prev => {
+            const updatedErrors = { ...prev };
+            delete updatedErrors[`topic-${index}`];
+            return updatedErrors;
+        });
+    };
+
+    const removeReference = (index) => {
+        const updatedReferences = formData.references.filter((_, i) => i !== index);
+
+        setFormData(prev => ({
+            ...prev,
+            references: updatedReferences
+        }));
+
+        setErrors(prev => {
+            const updatedErrors = { ...prev };
+            delete updatedErrors[`reference-${index}`];
+            return updatedErrors;
+        })
+    }
+
+    const removeMaterial = (index) => {
+        const updatedMaterials = formData.materials.filter((_, i) => i !== index);
+
+        setFormData(prev => ({
+            ...prev,
+            materials: updatedMaterials
+        }));
+
+        setErrors(prev => {
+            const updatedErrors = { ...prev };
+            delete updatedErrors[`materialDesc-${index}`];
+            delete updatedErrors[`materialUrl-${index}`];
+            return updatedErrors;
+        });
+    }
+
+    const validateMaterial = (materials, index) => {
+        const { desc, fileURL } = materials[index];
+
+        let descError = "";
+        let urlError = "";
+
+        if (desc && !fileURL) {
+            descError = "Material URL is required.";
+        }
+
+        if (fileURL && !desc) {
+            urlError = "Material name is required.";
+        }
+
+        setErrors(prev => ({
+            ...prev,
+            [`materialDesc-${index}`]: urlError,
+            [`materialUrl-${index}`]: descError
+        }));
+    };
 
     const handleMaterialDescChange = (index, value) => {
         const updatedMaterials = [...formData.materials];
         updatedMaterials[index].desc = value;
         setFormData({ ...formData, materials: updatedMaterials });
+
+        validateMaterial(updatedMaterials, index);
     };
 
     const handleMaterialUrlChange = (index, value) => {
         const updatedMaterials = [...formData.materials];
         updatedMaterials[index].fileURL = value;
         setFormData({ ...formData, materials: updatedMaterials });
+
+        validateMaterial(updatedMaterials, index)
     };
 
     const handleReferenceChange = (index, value) => {
@@ -51,13 +137,25 @@ const Step2Resources = ({
                             exit={{ opacity: 0, y: -10 }}
                             className="input-wrapper"
                         >
-                            <input
-                                type="text"
-                                value={topic}
-                                onChange={(e) => handleTopicsChange(index, e.target.value)}
-                                placeholder={`Topic ${index + 1}`}
-                                className="form-input"
-                            />
+                            <div className="input-row">
+                                <input
+                                    type="text"
+                                    name='topicsToLearn'
+                                    value={topic}
+                                    onChange={(e) => handleTopicsChange(index, e.target.value)}
+                                    placeholder={`Topic ${index + 1}`}
+                                    className="form-input"
+                                />
+                                {formData.topicsToLearn.length > 1 && (
+                                    <button
+                                        type="button"
+                                        className="remove-btn"
+                                        onClick={() => removeTopic(index)}
+                                    >
+                                        <IoMdClose color="#333" className='icon' />
+                                    </button>)}
+                                {errors[`topic-${index}`] && <p className='error'>{errors[`topic-${index}`]}</p>}
+                            </div>
                         </motion.div>
                     ))}
                 </AnimatePresence>
@@ -79,20 +177,34 @@ const Step2Resources = ({
                             exit={{ opacity: 0, y: -10 }}
                             className="input-wrapper"
                         >
+                            <div className="input-row">
+                                <input
+                                    type="text"
+                                    name='materialDesc'
+                                    value={material.desc}
+                                    onChange={(e) => handleMaterialDescChange(index, e.target.value)}
+                                    placeholder={`Give a description of the material`}
+                                    className="form-input"
+                                />
+                                {formData.materials.length > 1 && (
+                                    <button
+                                        type="button"
+                                        className="remove-btn"
+                                        onClick={() => removeMaterial(index)}
+                                    >
+                                        <IoMdClose color="#333" className='icon' />
+                                    </button>)}
+                                {errors[`materialDesc-${index}`] && <p className='error'>{errors[`materialDesc-${index}`]}</p>}
+                            </div>
                             <input
                                 type="text"
-                                value={material.desc}
-                                onChange={(e) => handleMaterialDescChange(index, e.target.value)}
-                                placeholder={`Give a description of the material`}
-                                className="form-input"
-                            />
-                            <input
-                                type="text"
+                                name='materialUrl'
                                 value={material.fileURL}
                                 onChange={(e) => handleMaterialUrlChange(index, e.target.value)}
                                 placeholder={`Give the File URL`}
                                 className="form-input"
                             />
+                            {errors[`materialUrl-${index}`] && <p className='error'>{errors[`materialUrl-${index}`]}</p>}
                         </motion.div>
                     ))}
                 </AnimatePresence>
@@ -113,13 +225,25 @@ const Step2Resources = ({
                             exit={{ opacity: 0, y: -10 }}
                             className="input-wrapper"
                         >
-                            <input
-                                type="text"
-                                value={reference}
-                                onChange={(e) => handleReferenceChange(index, e.target.value)}
-                                placeholder={`Reference ${index + 1}`}
-                                className="form-input"
-                            />
+                            <div className="input-row">
+                                <input
+                                    type="text"
+                                    value={reference}
+                                    onChange={(e) => handleReferenceChange(index, e.target.value)}
+                                    placeholder={`Reference ${index + 1}`}
+                                    className="form-input"
+                                />
+                                {formData.references.length > 1 && (
+                                    <button
+                                        type="button"
+                                        className="remove-btn"
+                                        onClick={() => removeReference(index)}
+                                    >
+                                        <IoMdClose 
+                                        color="#333" className='icon' />
+                                    </button>)}
+                                {errors[`reference-${index}`] && <p className='error'>{errors[`reference-${index}`]}</p>}
+                            </div>
                         </motion.div>
                     ))}
                 </AnimatePresence>

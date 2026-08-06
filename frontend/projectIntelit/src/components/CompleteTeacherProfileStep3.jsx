@@ -1,15 +1,16 @@
 import React from 'react';
+import { uploadThumbnailToCloudinary } from '../utils/cloudinaryUtils';
 
-const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSubmit }) => {
-    const handleImageUpload = (e) => {
+
+const CompleteTeacherProfileStep3 = ({ formData, handleChange, setFormData, prevStep, handleSubmit, errors }) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            // For demo purposes, convert to base64 (not for production)
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData({ ...formData, profilePic: reader.result });
-            };
-            reader.readAsDataURL(file);
+            if (!file) return;
+            const url = await uploadThumbnailToCloudinary(file);
+            console.log('Image URL:', url);
+            if (!url) return;
+            setFormData({ ...formData, profilePic: url });
         }
     };
 
@@ -32,7 +33,8 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
             <div className="input-group">
                 <label>GitHub</label>
                 <input
-                    type="text"
+                    type="url"
+                    name='github'
                     value={formData.socialLinks.github}
                     onChange={(e) =>
                         setFormData({
@@ -45,30 +47,34 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
                     }
                     placeholder="https://github.com/username"
                 />
+                {errors.github &&
+                    <p className='error'>{errors.github}</p>}
             </div>
 
             <div className="input-group">
                 <label>LinkedIn</label>
                 <input
-                    type="text"
+                    type="url"
+                    name='linkedin'
                     value={formData.socialLinks.linkedIn}
-                    onChange={(e) =>
-                        setFormData({
-                            ...formData,
-                            socialLinks: {
-                                ...formData.socialLinks,
-                                linkedIn: e.target.value,
-                            },
-                        })
-                    }
+                    onChange={(e) => setFormData({
+                        ...formData,
+                        socialLinks: {
+                            ...formData.socialLinks,
+                            linkedIn: e.target.value,
+                        }
+                    })}
                     placeholder="https://linkedin.com/in/username"
                 />
+                {errors.linkedin &&
+                    <p className='error'>{errors.linkedin}</p>}
             </div>
 
             <div className="input-group">
                 <label>Twitter</label>
                 <input
-                    type="text"
+                    type="url"
+                    name='twitter'
                     value={formData.socialLinks.twitter}
                     onChange={(e) =>
                         setFormData({
@@ -81,6 +87,8 @@ const CompleteTeacherProfileStep3 = ({ formData, setFormData, prevStep, handleSu
                     }
                     placeholder="https://twitter.com/username"
                 />
+                {errors.twitter &&
+                    <p className='error'>{errors.twitter}</p>}
             </div>
 
             <div className="button-group">

@@ -3,17 +3,18 @@
 import React, { useState } from 'react';
 import { uploadThumbnailToCloudinary } from '../utils/cloudinaryUtils';
 
-const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit }) => {
+const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit, errors, loading, setLoading }) => {
     const [localImage, setLocalImage] = useState(null);
 
     const handleImageChange = async (e) => {
+        setLoading(true);
         const file = e.target.files[0];
         if (!file) return;
         const url = await uploadThumbnailToCloudinary(file);
         console.log('Image URL:', url);
         if (!url) return;
         setFormData({ ...formData, profilePic: url });
-
+        setLoading(false);
     };
 
     const statusOptions = ['Studying', 'Berojgaar', 'Working Professional'];
@@ -26,6 +27,7 @@ const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit
                 <label>Profile Picture</label>
                 <input type="file" accept="image/*" onChange={handleImageChange} />
                 {localImage && <img src={localImage} alt="preview" className="image-preview" />}
+                {loading && <div className="loader">Uploading...</div>}
             </div>
 
             <div className="form-group">
@@ -45,6 +47,8 @@ const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit
                     }
                     placeholder="https://linkedin.com/in/username"
                 />
+                {errors.linkedin &&
+                    <p className='error'>{errors.linkedin}</p>}
             </div>
 
             <div className="form-group">
@@ -64,6 +68,8 @@ const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit
                     }
                     placeholder="https://github.com/username"
                 />
+                {errors.github &&
+                    <p className='error'>{errors.github}</p>}
             </div>
 
             <div className="form-group">
@@ -83,6 +89,8 @@ const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit
                     }
                     placeholder="https://twitter.com/username"
                 />
+                {errors.twitter &&
+                    <p className='error'>{errors.twitter}</p>}
             </div>
 
             <div className="form-group">
@@ -110,14 +118,20 @@ const StepThree = ({ formData, setFormData, handleChange, prevStep, handleSubmit
                     onChange={handleChange}
                     placeholder="e.g., Web Dev, AI, ML"
                 />
+                {errors.interests &&
+                    <p className='error'>{errors.interests}</p>}
             </div>
 
             <div className="button-group">
                 <button onClick={prevStep} className="prev-btn">
                     Previous
                 </button>
-                <button onClick={handleSubmit} className="submit-btn">
-                    Submit
+                <button
+                    onClick={handleSubmit}
+                    className="submit-btn"
+                    disabled={loading}
+                >
+                    {loading ? "Submitting..." : "Submit"}
                 </button>
             </div>
         </div>

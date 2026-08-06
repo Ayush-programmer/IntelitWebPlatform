@@ -6,7 +6,8 @@ const Step1BasicInfo = ({
     setFormData,
     handleThumbnailUpload,
     loading,
-    nextStep
+    nextStep,
+    errors
 }) => {
     return (
         <div className="step-container">
@@ -24,6 +25,7 @@ const Step1BasicInfo = ({
                         id="title"
                         required
                     />
+                    {errors.title && <p className="error">{errors.title}</p>}
                 </div>
 
                 <div className="form-group">
@@ -35,26 +37,34 @@ const Step1BasicInfo = ({
                         placeholder="Enter a short description"
                         className="textarea"
                         id="desc"
+                        minLength={10}
+                        maxLength={500}
                         required
                     />
+                    {errors.description && <p className="error">{errors.description}</p>}
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="category" className="label">Category</label>
                     <input
+                        type="text"
                         name="category"
                         value={formData.category || ''}
                         onChange={handleChange}
                         placeholder="Enter the course category"
                         className="category"
                         id="category"
+                        minLength={10}
+                        maxLength={100}
                         required
                     />
+                    {errors.category && <p className="error">{errors.category}</p>}
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="price" className="label">Price</label>
                     <input
+                        type="number"
                         name="price"
                         value={formData.price || ''}
                         onChange={handleChange}
@@ -62,6 +72,7 @@ const Step1BasicInfo = ({
                         className="price"
                         id="price"
                     />
+                    {errors.price && <p className="error">{errors.price}</p>}
                 </div>
 
                 <div className="form-group">

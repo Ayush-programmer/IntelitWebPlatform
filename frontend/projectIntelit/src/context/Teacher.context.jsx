@@ -18,10 +18,8 @@ export const TeacherProvider = ({ children }) => {
 
     const fetchUserData = async () => {
         const token = localStorage.getItem("token");
-        console.log("Fetching user data with token:", token);
-        
+
         const role = localStorage.getItem("role");
-        console.log("User role from localStorage:", role);
 
         if (role === "user") {
             setTeacher(null);

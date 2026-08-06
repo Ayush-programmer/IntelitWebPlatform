@@ -80,6 +80,10 @@ const courseSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            videoPublicId: {
+                type: String,
+                required: true
+            }
         }],
     }],
     price: {

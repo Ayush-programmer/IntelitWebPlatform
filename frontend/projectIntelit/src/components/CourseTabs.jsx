@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaUser, FaQuestionCircle, FaBook, FaStar, FaInfoCircle, FaListUl, FaCheckCircle, FaUserCircle, FaChalkboardTeacher, FaChevronDown, FaChevronUp, FaLink } from 'react-icons/fa';
 import { MdCategory } from 'react-icons/md';
 import axios from '../config/axios.js';
+import toast from 'react-hot-toast';
 
 const CourseTabs = ({ user, course, studentEnrolled }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -11,7 +12,7 @@ const CourseTabs = ({ user, course, studentEnrolled }) => {
 
   const handleSubmitReview = async () => {
     if (!rating || !reviewText.trim()) {
-      alert("Please provide both rating and review text.");
+      toast.error("Please provide both rating and review text.");
       return;
     }
 
@@ -24,9 +25,9 @@ const CourseTabs = ({ user, course, studentEnrolled }) => {
 
     try {
       const res = await axios.post('/courses/add-review', newReview);
-      alert('Review Added!');
+      toast.success('Review Added!');
     } catch (err) {
-      console.error('Submission error:', err);
+      toast.error('Something went wrong');
     }
 
     setRating(0);
@@ -61,11 +62,21 @@ const CourseTabs = ({ user, course, studentEnrolled }) => {
           <div className="author-section">
             <h2><FaUserCircle /> Instructor</h2>
             <div className="author-info">
-              <div className="author-icon">
-                <FaChalkboardTeacher />
-              </div>
+
+              {course.teacher.profilePic ? (
+                <div className="author-image">
+                  <img
+                    src={course.teacher.profilePic}
+                    alt={course.teacher.name}
+                  />
+                </div>
+              ) : (
+                <div className="author-icon">
+                  <FaChalkboardTeacher />
+                </div>
+              )}
               <div className="author-details">
-                <p><strong>Name:</strong> {course.teacher.name}</p>
+                <p><strong>Name:</strong> {course.teacher.profile?.fullName || course.teacher.name}</p>
                 <p><strong>Email:</strong> <a href={`mailto:${course.teacher.email}`}>{course.teacher.email}</a></p>
               </div>
             </div>

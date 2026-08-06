@@ -19,4 +19,6 @@ router.delete('/delete/:courseId', authUser, authorizeRole("teacher"), courseCon
 
 router.post('/add-review', authUser, courseController.addReview);
 
+router.delete('/cloudinary/videos', authUser, courseController.deleteVideos);
+
 export default router;

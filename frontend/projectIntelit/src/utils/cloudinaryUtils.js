@@ -20,25 +20,37 @@ export const uploadThumbnailToCloudinary = async (file) => {
     else throw new Error(data.error?.message || "Failed to upload thumbnail to Cloudinary");
 };
 
-export const uploadVideoToCloudinary = async (file) => {
+import axios from "axios";
+
+export const uploadVideoToCloudinary = async (
+    file,
+    onProgress
+) => {
+
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("upload_preset", uploadPresetCourse);
     formData.append("folder", "course/media");
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/video/upload`, {
-        method: "POST",
-        body: formData
-    });
+    const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`,
+        formData,
+        {
+            onUploadProgress: (event) => {
 
-    const data = await res.json();
+                const progress = Math.round(
+                    (event.loaded * 100) / event.total
+                );
 
-    if (data.secure_url) {
-        return {
-            url: data.secure_url,
-            duration: data.duration || 0, // duration in seconds
-        };
-    } else {
-        throw new Error(data.error?.message || "Failed to upload video to Cloudinary");
-    }
+                onProgress(progress);
+            }
+        }
+    );
+
+    return {
+        url: res.data.secure_url,
+        duration: res.data.duration,
+        publicId: res.data.public_id
+    };
 };

@@ -6,8 +6,11 @@ import { IoMdMail } from 'react-icons/io';
 import { FaBook } from 'react-icons/fa';
 import { MdDashboard } from 'react-icons/md';
 import { MdHome } from 'react-icons/md';
+import { X } from "lucide-react";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import Swal from "sweetalert2";
 
 const TeacherDashboard = () => {
   const [teacher, setTeacher] = useState(null);
@@ -45,16 +48,67 @@ const TeacherDashboard = () => {
     setIsProfileComplete(teacher?.isProfileComplete);
   }, [teacher]);
 
-  const handleDelete = async (courseId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
-    if (!confirmDelete) return;
+  const deleteCourse = async (courseId) => {
     try {
-      await axios.delete(`/courses/${courseId}`);
-      alert("Course deleted!");
-      // Optional: refetch courses or remove it from state
+      await axios.delete(`/courses/delete/${courseId}`);
+      toast.success("Course deleted successfully."); setCourses(prev =>
+        prev.filter(course => course._id !== courseId)
+      );
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete course.");
+      toast.error("Failed to delete course.");
+    }
+  };
+
+  const handleDelete = async (courseId) => {
+    // const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+    // if (!confirmDelete) return;
+
+    const result = await Swal.fire({
+      title: "Delete this course?",
+      html: `
+    <p style="margin:0;color:#6b7280;">
+      This will permanently remove the course, including all lessons, videos,
+      and associated resources. This action cannot be reversed.
+    </p>
+  `,
+      icon: "warning",
+      showCancelButton: true,
+
+      confirmButtonText: "Delete Course",
+      cancelButtonText: "Keep Course",
+
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#8b75ed",
+
+      reverseButtons: true,
+      focusCancel: true,
+
+      allowOutsideClick: false,
+      allowEscapeKey: true,
+
+      width: 500,
+      padding: "2rem",
+
+      buttonsStyling: true,
+
+      showClass: {
+        popup: "animate__animated animate__zoomIn",
+      },
+      hideClass: {
+        popup: "animate__animated animate__zoomOut",
+      },
+    });
+
+    if (result.isConfirmed) {
+      await deleteCourse(courseId);
+      Swal.fire({
+        icon: "success",
+        title: "Course Deleted",
+        text: "The course has been permanently removed.",
+        confirmButtonColor: "#8b75ed",
+        timer: 1800,
+        showConfirmButton: false,
+      });
     }
   };
 
@@ -65,24 +119,46 @@ const TeacherDashboard = () => {
       {/* Sidebar */}
       <aside className={`left-sidebar ${isSidebarOpen ? "open" : "closed"}`}>
         <div className="sidebar-header">
-          {!isSidebarOpen && <Menu className="menu-icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />}
           <a className="brand-logo" href="#">
             Intelit
           </a>
+          {!isSidebarOpen && <Menu className="menu-icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />}
+          {isSidebarOpen && <X className="close-icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)} size={23} />}
         </div>
 
         <nav className="sidebar-links">
-          <a href="/" className='sidebar-link'><span className='nav-links-icon'><MdHome size={24} /></span>Home</a>
-          <a href="/teacherdashboard" className="sidebar-link active"><span className="nav-links-icon"><MdDashboard size={23} /></span>Dashboard</a>
-          <a href="/courses" className="sidebar-link"><span className="nav-links-icon"><FaBook size={23} /></span>Courses</a>
-          <a href="/community" className="sidebar-link"><span className="nav-links-icon"><IoMdMail size={23} /></span>Community</a>
-          <a href="/messages" className="sidebar-link"><span className="nav-links-icon"><FiUser size={23} /></span>Messages</a>
+          <a href="/" className="sidebar-link">
+            <span className="nav-links-icon"><MdHome size={24} /></span>
+            Home
+          </a>
+
+          <a href="/teacherdashboard" className="sidebar-link active">
+            <span className="nav-links-icon"><MdDashboard size={23} /></span>
+            Dashboard
+          </a>
+
+          <a href="/teacherdashboard" className="sidebar-link">
+            <span className="nav-links-icon"><FaBook size={23} /></span>
+            Courses
+          </a>
+
+          <div className="sidebar-link coming-soon-link">
+            <span className="nav-links-icon"><IoMdMail size={23} /></span>
+            Community
+            <span className="coming-soon-badge">Coming Soon</span>
+          </div>
+
+          <div className="sidebar-link coming-soon-link">
+            <span className="nav-links-icon"><FiUser size={23} /></span>
+            Messages
+            <span className="coming-soon-badge">Coming Soon</span>
+          </div>
         </nav>
 
         <div className="sidebar-bottom">
-          <a href="/settings" className="sidebar-link">
+          {/* <a href="/settings" className="sidebar-link">
             <span className="nav-links-icon"><Settings size={20} /></span> Settings
-          </a>
+          </a> */}
           <a href="/logout" className="sidebar-link">
             <span className="nav-links-icon"><LogOut size={20} /></span> Logout
           </a>
@@ -112,7 +188,11 @@ const TeacherDashboard = () => {
 
         {/* Created Courses */}
         <section className="courses-section">
-          <h2>Your Created Courses</h2>
+
+          <div className="courses-header">
+            <h2>Your Created Courses</h2>
+            <Link to="/uploadcourse" className="create-course-btn">+ Create Course</Link>
+          </div>
 
           <div className="courses-grid">
             {courses.length ? (
@@ -120,8 +200,10 @@ const TeacherDashboard = () => {
                 <div key={course._id} className="course-card">
                   <Link to={`/course/${course._id}`} className="thumbnail-link">
                     <img src={course.thumbnail} alt={course.title} />
-                    <h4>{course.title}</h4>
-                    <p>{course.category}</p>
+                    <div className="course-info">
+                      <h4>{course.title}</h4>
+                      <p>{course.category}</p>
+                    </div>
                   </Link>
 
                   <div className="course-actions">
@@ -131,7 +213,9 @@ const TeacherDashboard = () => {
                 </div>
               ))
             ) : (
-              <p>No courses created yet.</p>
+              <div className="empty-course-state">
+                <p>No courses created yet.</p>
+              </div>
             )}
           </div>
         </section>
@@ -145,57 +229,75 @@ const TeacherDashboard = () => {
       {/* Right Sidebar */}
       {/* <aside className="teacher-right-sidebar"> */}
       <aside className={`right-sidebar ${isRightSidebarVisible ? "show" : ""}`}>
-        <div className='flex align-center'>
+
+        {/* Sticky Header */}
+        <div className="right-sidebar-header">
+
           <div className="greeting">
+
             <div className="profile-image">
               <img src={profilePic} alt="profile" />
             </div>
-            <h3>Good Morning, {teacher?.profile.fullName?.split(' ')[0] || teacher?.fullName}!</h3>
+
+            <h3>
+              Good Morning,{" "}
+              {teacher?.profile.fullName?.split(" ")[0] || teacher?.fullName}!
+            </h3>
+
           </div>
-          <span className='down-btn'>
-            {!isRightSidebarVisible ? (
-              <FaChevronUp
-                size={20}
-                className="dropdown-icon"
-                onClick={() => setIsRightSidebarVisible(true)}
-              />
+
+          <button
+            className="sidebar-toggle-btn"
+            onClick={() =>
+              setIsRightSidebarVisible(!isRightSidebarVisible)
+            }
+          >
+            {isRightSidebarVisible ? (
+              <FaChevronDown className="dropdown-icon" size={20} />
             ) : (
-              <FaChevronDown
-                size={20}
-                className="dropdown-icon"
-                onClick={() => setIsRightSidebarVisible(false)}
-              />
+              <FaChevronUp className="dropdown-icon" size={20} />
             )}
-          </span>
+          </button>
+
         </div>
-        <p className='bio'><strong>Bio : </strong> {teacher.profile.bio}</p>
 
-        {isProfileIncomplete && (
-          <div className="complete-profile-card">
-            <h4>Complete Your Profile</h4>
-            <p>Complete your profile to unlock personalized recommendations and more.</p>
-            <Link className="complete-profile-btn" to='/completeteacherprofile'>Complete Now</Link>
-          </div>
-        )}
+        {/* Scrollable Content */}
+        <div className="right-sidebar-content">
 
-        {/*  Note : Here I gave a condition to show the edit profile card only if the profile is complete and also i have given the classname same as complete-profile to avoid writing css for same button again and again */}
-        {!isProfileIncomplete && (
-          <div className="complete-profile-card">
-            <h4>Edit Your Profile</h4>
-            <Link className="complete-profile-btn" to='/updateteacherprofile'>Edit Profile</Link>
-          </div>
-        )}
+          <p className="bio">
+            <strong>Bio :</strong> {teacher.profile.bio}
+          </p>
 
-        <div className="dummy-graph">
-          <h4>Learning Progress</h4>
-          <div className="graph-placeholder">
-            {/* Dummy Graph */}
-            <div className="bar bar1"></div>
-            <div className="bar bar2"></div>
-            <div className="bar bar3"></div>
-            <div className="bar bar4"></div>
-          </div>
+          {isProfileIncomplete ? (
+            <div className="complete-profile-card">
+              <h4>Complete Your Profile</h4>
+              <p>
+                Complete your profile to unlock personalized
+                recommendations and more.
+              </p>
+
+              <Link
+                className="complete-profile-btn"
+                to="/completeteacherprofile"
+              >
+                Complete Now
+              </Link>
+            </div>
+          ) : (
+            <div className="complete-profile-card">
+              <h4>Edit Your Profile</h4>
+
+              <Link
+                className="complete-profile-btn"
+                to="/updateteacherprofile"
+              >
+                Edit Profile
+              </Link>
+            </div>
+          )}
+
         </div>
+
       </aside>
     </div>
   );

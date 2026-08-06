@@ -24,7 +24,7 @@ export const updateTeacherProfile = async (teacherId, updateData) => {
     return updatedTeacher;
 }
 
-export const getAllTeachers = async ({ teacherId }) => {
+export const getAllTeachers = async ({ teacherId }) => {                                                                                                                                                                                        
     const teachers = await teacherModel.find({
         _id: { $ne: teacherId }
     });

@@ -1,85 +1,95 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import Navbar from '../components/common/Navbar.jsx';
+import Footer from '../components/common/Footer.jsx';
+import WhyChooseSection from '../components/Home/WhyChooseSection.jsx';
 
 const About = () => {
   return (
     <div>
       <Navbar />
-      <div className='about'>
-        <div className="page-header page-header-about">
-          <h2>#KnowUs</h2>
-          <p>Lorem ipsum dolor sit amet consectetur.</p>
-        </div>
+      <div className="about">
 
-        <div className="about about-head section-p1">
-          <img src="./images/smartEdu.svg" alt="" />
-          <div>
-            <h2>Who We Are?</h2>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab vero autem voluptatum odit quod? Quis
-              repellat laboriosam, natus assumenda aut ad fugiat nulla quibusdam magnam sunt adipisci dolore quisquam
-              amet similique quidem sed. Ipsum et ipsa repudiandae, fugit voluptate ad nemo soluta distinctio eveniet
-              dolores cupiditate natus vel ullam architecto adipisci, amet tenetur. Amet, excepturi debitis,
-              repellendus recusandae natus pariatur accusamus unde mollitia, eum quod quae architecto hic? Dolorum
-              voluptas eveniet, laborum dolore modi repellat. Magnam repellat laboriosam aliquid omnis quam! Alias
-              accusamus quis quae. Nesciunt in soluta consequuntur, cumque quibusdam incidunt odio, sint, obcaecati
-              voluptatem vitae natus itaque nemo?</p>
-            <abbr title="">Create stunning images with as much as or as little control as you like thanks to a choice of
-              Basic and Creative modes.</abbr>
-            <br /><br />
-            <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%">Create stunning images with as much as or as
-              little control as you like
-              thanks to a choice of
-              Basic and Creative modes.</marquee>
-          </div>
-        </div>
-        <section className="why-choose">
+        {/* Hero Header */}
+        <section className="about-hero">
           <div className="container">
-            <div className="main-box" data-aos="zoom-in">
-              <div className="content-box">
-                <h2>Why You Choose Our Platform</h2>
-                <p className="text-mute">I was designed to assist user with a wide range of tasks and answer
-                  questions to the best of
-                  my ability.</p>
-                <button className="btn-primary-col">Learn More</button>
-              </div>
-              <div className="image-box">
-                <img src="./images/book-with-brain.png" alt="Program Image" />
-              </div>
+            <span className="about-badge">About Intelit</span>
+            <h1>Empowering Learners Through Practical Education</h1>
+            <p>
+              Intelit is built for students who want real skills and instructors who
+              want to create meaningful learning experiences.
+            </p>
+          </div>
+        </section>
+
+        {/* Main About Section */}
+        <section className="about-content section-p1">
+          <div className="container about-grid">
+
+            <div className="about-image" data-aos="fade-left">
+              <img src="./images/smartEdu.svg" alt="Intelit Learning" />
             </div>
 
-            <div className="features-grid">
-              <div className="feature-box" data-aos="zoom-in-right" data-aos-duration="1000">
-                <div className="icon">
-                  <i className="fa-solid fa-diamond"></i>
+            <div className="about-text" data-aos="fade-left">
+
+              <h2>Who We Are</h2>
+
+              <p>
+                Intelit is a modern e-learning platform designed to make quality
+                education accessible, practical, and engaging. Whether you're a
+                student looking to build in-demand skills or an instructor ready to
+                share your expertise, Intelit provides a seamless learning experience.
+              </p>
+
+              <p>
+                Our mission is to bridge the gap between theory and real-world
+                application through structured courses, hands-on learning, and a
+                platform powered by modern technologies.
+              </p>
+
+              <div className="about-highlights">
+                <div className="highlight-card">
+                  <span>🎯</span>
+                  <p>Practical Learning</p>
                 </div>
-                <h3>Access Anywhere</h3>
-                <p className="text-mute">Flexible access to courses anywhere, anytime.</p>
-              </div>
-              <div className="feature-box" data-aos="zoom-in-right" data-aos-duration="1000">
-                <div className="icon">
-                  <i className="fa-solid fa-stopwatch"></i>
+
+                <div className="highlight-card">
+                  <span>📚</span>
+                  <p>Industry-Relevant Courses</p>
                 </div>
-                <h3>Flexible Time</h3>
-                <p className="text-mute">Study at your own pace with a flexible schedule.</p>
-              </div>
-              <div className="feature-box" data-aos="zoom-in-left" data-aos-duration="1000">
-                <div className="icon">
-                  <i className="fa-solid fa-layer-group"></i>
+
+                <div className="highlight-card">
+                  <span>👨‍🏫</span>
+                  <p>Expert Instructors</p>
                 </div>
-                <h3>Organized Program</h3>
-                <p className="text-mute">Structured and well-organized courses.</p>
-              </div>
-              <div className="feature-box" data-aos="zoom-in-left" data-aos-duration="1000">
-                <div className="icon">
-                  <i className="fa-solid fa-award"></i>
+
+                <div className="highlight-card">
+                  <span>🚀</span>
+                  <p>Learn Anytime, Anywhere</p>
                 </div>
-                <h3>Certificate</h3>
-                <p className="text-mute">Receive a certificate upon course completion.</p>
               </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        {/* Vision Section */}
+        <section className="about-vision">
+          <div className="container">
+            <div className="vision-card">
+              <i className="fa-solid fa-quote-left"></i>
+              <h3>Our Vision</h3>
+              <p>
+                To create a learning ecosystem where anyone can gain practical
+                knowledge, build confidence, and unlock new career opportunities
+                through accessible and high-quality education.
+              </p>
             </div>
           </div>
         </section>
+
+        <WhyChooseSection />
+
       </div>
       <Footer />
     </div>

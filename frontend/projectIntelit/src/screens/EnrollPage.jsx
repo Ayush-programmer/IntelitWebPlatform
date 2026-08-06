@@ -2,6 +2,7 @@ import axios from '../config/axios.js';
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../context/user.context.jsx';
+import toast from 'react-hot-toast';
 
 const EnrollPage = () => {
     const { id } = useParams();
@@ -24,8 +25,10 @@ const EnrollPage = () => {
 
     const handlePayment = async () => {
         const res = await loadRazorpayScript();
+        console.log(res);
+
         if (!res) {
-            alert("Failed to load Razorpay SDK. Check your internet.");
+            toast.error("Failed to load Razorpay SDK. Check your internet.");
             return;
         }
         try {
@@ -43,7 +46,7 @@ const EnrollPage = () => {
                 name: course.title,
                 description: "Course Enrollment",
                 order_id: order.id,
-                handler: function (response) {
+                handler: async function (response) {
                     const paymentDetails = {
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,
@@ -53,15 +56,16 @@ const EnrollPage = () => {
                         teacherId: course.teacher._id,
                     };
 
-                    // Verify payment and enroll user
-                    axios.post("/payments/verify", paymentDetails)
-                        .then(() => {
-                            alert("Payment successful and user enrolled!");
-                            navigate(`/payment-success/${course._id}`);
-                        })
-                        .catch(() => {
-                            alert("Payment success, but enrollment failed.");
-                        });
+                    try {
+                        // Verify payment and enroll user
+                        await axios.post("/payments/verify", paymentDetails)
+
+                        toast.success("Payment successful and user enrolled!");
+                        await fetchUserData();
+                        navigate(`/payment-success/${course._id}`);
+                    } catch (error) {
+                        toast.error("Payment success, but enrollment failed.");
+                    };
                 },
                 prefill: {
                     name: user.name,
@@ -90,8 +94,6 @@ const EnrollPage = () => {
     }, [id]);
 
     useEffect(() => {
-        console.log("User:", user);
-        
         if (!user) {
             fetchUserData();
         }

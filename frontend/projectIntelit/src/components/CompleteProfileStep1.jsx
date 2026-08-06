@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const CompleteProfileStep1 = ({ formData, handleChange, nextStep }) => {
+const CompleteProfileStep1 = ({ formData, handleChange, nextStep, errors }) => {
 
   return (
     <div className="step-container">
@@ -18,6 +18,21 @@ const CompleteProfileStep1 = ({ formData, handleChange, nextStep }) => {
           placeholder="Enter your full name"
           required
         />
+        {errors.fullName &&
+          <p className='error'>{errors.fullName}</p>}
+        {/* <input
+          {...register("fullName", {
+            required: "Full name is required",
+            pattern: {
+              value: /^[A-Za-z\s]+$/,
+              message: "Only letters and spaces are allowed"
+            }
+          })}
+          {...errors.fullName && (
+            <p className="input-error">{errors.fullName.message}</p>
+          )} */}
+
+        {/* /> */}
       </div>
 
       <div className="form-group">
@@ -27,12 +42,13 @@ const CompleteProfileStep1 = ({ formData, handleChange, nextStep }) => {
           name="phone"
           min={10}
           max={10}
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
           value={formData.phone || ''}
           onChange={handleChange}
           placeholder="Enter your phone number"
           required
         />
+        {errors.phone &&
+          <p className='error'>{errors.phone}</p>}
       </div>
 
       <div className="form-group">
@@ -49,10 +65,13 @@ const CompleteProfileStep1 = ({ formData, handleChange, nextStep }) => {
           <option value="non-binary">Non-binary</option>
           <option value="prefer-not-say">Prefer not to say</option>
         </select>
+        {
+          errors.gender && <p className="error">{errors.gender}</p>
+        }
       </div>
 
       <div className="button-group">
-        <button onClick={nextStep} className="next-btn">
+        <button type='button' onClick={nextStep} className="next-btn">
           Next
         </button>
       </div>

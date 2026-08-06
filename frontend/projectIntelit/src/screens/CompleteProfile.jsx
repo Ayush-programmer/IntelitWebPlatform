@@ -4,10 +4,15 @@ import StepTwo from '../components/CompleteProfileStep2.jsx';
 import StepThree from '../components/CompleteProfileStep3.jsx';
 import axios from '../config/axios.js';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { validateName, validateTextField, validatePhone, validateLinkedIn, validateGithub, validateTwitter } from '../utils/formValidation.js';
+
+import toast from 'react-hot-toast';
 
 const CompleteProfile = () => {
   const [step, setStep] = useState(1);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -57,20 +62,119 @@ const CompleteProfile = () => {
       });
     } catch (err) {
       console.error("Failed to load user:", err);
-      alert("Error loading profile.");
+      toast.error("Error loading profile.");
     }
   };
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
+  const validateStep1 = () => {
+    const newErrors = {
+      fullName: validateName(formData.fullName),
+      phone: validatePhone(formData.phone),
+      gender: !formData.gender ? "Please select a gender." : ""
+    };
+
+    setErrors(prev => ({
+      ...prev,
+      ...newErrors
+    }));
+
+    return Object.values(newErrors).every(error => error === "");
+  };
+
+  const validateStep2 = () => {
+    const newErrors = {
+      bio: validateTextField(formData.bio)
+    };
+
+    setErrors(prev => ({
+      ...prev,
+      ...newErrors
+    }));
+    return Object.values(newErrors).every(error => error === "");
+  }
+
+  const validateStep3 = () => {
+    const newErrors = {
+      linkedIn: validateLinkedIn(formData.socialLinks.linkedIn),
+      github: validateGithub(formData.socialLinks.github),
+      twitter: validateTwitter(formData.socialLinks.twitter),
+      interests: validateTextField(formData.interests)
+    }
+
+    setErrors(prev => ({
+      ...prev,
+      ...newErrors
+    }));
+
+    return Object.values(newErrors).every(error => error === "");
+  }
+
+  const nextStep = () => {
+    if (step == 1 && !validateStep1()) {
+      toast.error('some validation failed')
+      return;
+    }
+    if (step == 2 && !validateStep2()) {
+      toast.error('some validation failed')
+      return;
+    }
+    setStep((prev) => Math.min(prev + 1, 3))
+  };
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    let error = "";
+
+    if (name === "fullName") {
+      error = validateName(value);
+    }
+
+    if (name === "phone") {
+      error = validatePhone(value);
+    }
+
+    if (name === 'bio') {
+      error = validateTextField(value);
+    }
+
+    if (name === 'linkedin') {
+      error = validateLinkedIn(value);
+    }
+
+    if (name === 'github') {
+      error = validateGithub(value);
+    }
+
+    if (name === 'twitter') {
+      error = validateTwitter(value);
+    }
+
+    if (name === 'interests') {
+      error = validateTextField(value);
+    }
+
+    setErrors(prev => ({
+      ...prev, [name]: error
+    }));
+  };
+
+  const validateForm = () => {
+    return (
+      validateStep1() &&
+      validateStep2() &&
+      validateStep3()
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error('some validation failed');
+      return;
+    }
 
     const payload = {
       ...formData,
@@ -87,14 +191,14 @@ const CompleteProfile = () => {
         : await axios.post('/users/complete-profile', payload);
 
       if (res.status === 200) {
-        alert(isEditMode ? 'Profile updated!' : 'Profile completed!');
+        toast.success(isEditMode ? 'Profile updated!' : 'Profile completed!');
         navigate('/userdashboard');
       } else {
-        alert(res.data.message || 'Something went wrong!');
+        toast.error(res.data.message || 'Something went wrong!');
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || 'Server error!');
+      toast.error(err.response?.data?.message || 'Server error!');
     }
   };
 
@@ -112,6 +216,7 @@ const CompleteProfile = () => {
               setFormData={setFormData}
               handleChange={handleChange}
               nextStep={nextStep}
+              errors={errors}
             />
           )}
           {step === 2 && (
@@ -121,6 +226,7 @@ const CompleteProfile = () => {
               handleChange={handleChange}
               nextStep={nextStep}
               prevStep={prevStep}
+              errors={errors}
             />
           )}
           {step === 3 && (
@@ -130,6 +236,9 @@ const CompleteProfile = () => {
               handleChange={handleChange}
               prevStep={prevStep}
               handleSubmit={handleSubmit}
+              errors={errors}
+              loading={loading}
+              setLoading={setLoading}
             />
           )}
         </form>

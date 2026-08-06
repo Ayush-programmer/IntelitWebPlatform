@@ -11,11 +11,6 @@ const PaymentSuccessPage = () => {
     const { user } = useContext(UserContext);
 
     useEffect(() => {
-        console.log("Token at PaymentSuccessPage:", localStorage.getItem("token"));
-    }, []);
-
-
-    useEffect(() => {
         if (!user) {
             navigate("/login");
             return;
@@ -28,7 +23,6 @@ const PaymentSuccessPage = () => {
     }, [user, navigate]);
 
     useEffect(() => {
-        console.log("User:", user);
         if (!user) {
             navigate("/login");
         }

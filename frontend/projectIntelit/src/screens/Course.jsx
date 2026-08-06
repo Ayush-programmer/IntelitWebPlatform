@@ -3,10 +3,11 @@ import { Link, useParams } from 'react-router-dom'
 import axios from '../config/axios.js'
 import Sidebar from '../components/Sidebar.jsx';
 import { UserContext } from '../context/user.context.jsx';
-import ReactPlayer from 'react-player'
 import CourseTabs from '../components/CourseTabs.jsx';
 import CourseContents from '../components/CourseContents.jsx';
 import { FaBars, FaTimes } from 'react-icons/fa'
+import CoursePlayer from '../components/coursePlayer.jsx';
+import toast from 'react-hot-toast';
 
 const Course = () => {
     const { courseId } = useParams();
@@ -14,7 +15,13 @@ const Course = () => {
     const [indices, setIndices] = useState([0, 0]);
     const [url, setUrl] = useState('');
     const [studentEnrolled, setStudentEnrolled] = useState(false);
-
+    const [courseLoading, setCourseLoading] = useState(true);
+    const [totalLessons, setTotalLessons] = useState(0);
+    const [duration, setDuration] = useState({
+        hours: 0,
+        minutes: 0
+    });
+    const [averageRating, setAverageRating] = useState(null);
     const [showSidebar, setShowSidebar] = useState(false);
 
     const toggleSidebar = () => {
@@ -24,16 +31,18 @@ const Course = () => {
     const { user, role, isLoading, fetchUserData } = useContext(UserContext);
 
     useEffect(() => {
+        setCourseLoading(true);
         axios.get(`/courses/${courseId}`)
             .then((res) => {
-                console.log(res.data);
-                console.log(res.data.course);
                 setCourse(res.data.course);
             })
             .catch((error) => {
-                console.log("Error fetching course", error);
+                toast.error("Error loading course");
             })
-    }, [courseId])
+        setCourseLoading(false);
+    }, [courseId]);
+
+
 
     useEffect(() => {
         if (
@@ -42,31 +51,68 @@ const Course = () => {
         ) {
             const videoUrl = course.courseContents[indices[0]].lessons[indices[1]].videoURL;
             setUrl(videoUrl);
-            console.log("Video URL:", videoUrl);
         }
     }, [course, indices]);
 
+    useEffect(() => {
+        if (!course?.courseContents) return;
+
+        const total = course.courseContents.reduce(
+            (total, module) => total + module.lessons.length,
+            0
+        );
+
+        setTotalLessons(total);
+
+
+        const totalDurationInSeconds = course.courseContents.reduce(
+            (total, module) =>
+                total +
+                module.lessons.reduce(
+                    (sum, lesson) => sum + lesson.videoDuration,
+                    0
+                ),
+            0
+        );
+
+
+        setDuration({
+            hours: Math.floor(totalDurationInSeconds / 3600),
+            minutes: Math.floor((totalDurationInSeconds % 3600) / 60)
+        });
+
+
+        if (course.reviews?.length > 0) {
+            const rating =
+                course.reviews.reduce(
+                    (sum, review) => sum + review.rating,
+                    0
+                ) / course.reviews.length;
+
+            setAverageRating(rating.toFixed(1));
+        }
+
+    }, [course]);
 
     useEffect(() => {
         if (!user) {
-            console.log('fetchUserData called from Course component');
             fetchUserData();
         }
     }, [user, fetchUserData])
 
     useEffect(() => {
-        if (user) {
+        if (course && user) {
             setStudentEnrolled(
-                user?.enrolledCourses.some(course => course._id.toString() === courseId)
+                user?.enrolledCourses?.some(
+                    (course) => course?._id?.toString() === courseId
+                )
             );
-            console.log("Student enrolled:", studentEnrolled);
-            console.log(courseId);
+            console.log(studentEnrolled);
 
-            
         }
     }, [user, courseId]);
 
-    if (isLoading && !user) {
+    if (isLoading && courseLoading && !user) {
         return <div>Loading...</div>;
     }
 
@@ -111,16 +157,18 @@ const Course = () => {
                                     <div className="down">
                                         {/* Course details: number of lessons, duration, and rating */}
                                         <span className="dur">
-                                            <i class="fa-regular fa-circle-play"></i>
-                                            <p className='dur-text'>38 lessons</p>
+                                            <i className="fa-regular fa-circle-play"></i>
+                                            <p className='dur-text'>{totalLessons} Lessons</p>
                                         </span>
                                         <span className="dur">
-                                            <i class="fa-regular fa-clock"></i>
-                                            <p className='dur-text'>4h 30min</p>
+                                            <i className="fa-regular fa-clock"></i>
+                                            <p className='dur-text'>{duration.hours}h {duration.minutes}min</p>
                                         </span>
                                         <span className="dur">
-                                            <i class="fa-regular fa-star"></i>
-                                            <p className='dur-text'>4.5(123 reviews)</p>
+                                            <i className="fa-regular fa-star"></i>
+                                            <p className='dur-text'>{averageRating
+                                                ? `${averageRating} (${course.reviews.length})`
+                                                : "No Reviews"}</p>
                                         </span>
                                     </div>
                                 </div>
@@ -138,7 +186,10 @@ const Course = () => {
                             <div className="video-div">
                                 <div className="video">
                                     {/* Video player for course lessons */}
-                                    <ReactPlayer url={url} controls={true} width="100%" height="100%" />
+                                    <CoursePlayer
+                                        videoUrl={url}
+                                        onContextMenu={(e) => e.preventDefault()}
+                                    />
                                 </div>
                                 <div className="course-desc-div">
                                     {/* Tabs for course description and additional details */}

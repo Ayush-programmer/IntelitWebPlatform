@@ -1,13 +1,13 @@
 import userModel from "../models/user.model.js";
 import * as userService from '../services/user.service.js';
 import { validationResult } from 'express-validator';
-import redisClient from "../services/redis.service.js";
+// import redisClient from "../services/redis.service.js";
 import User from "../models/user.model.js";
 
 export const createUserController = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array()[0].msg });
     }
 
     try {
@@ -53,13 +53,14 @@ export const loginUserController = async (req, res) => {
 }
 
 export const profileController = async (req, res) => {
+    // try catch
     const user = await userService.findUser({ email: req.user.email });
-    console.log(user);
 
     res.status(200).json({ user: user });
 }
 
 export const profileByIdController = async (req, res) => {
+    // try catch
     const { id } = req.params;
     const user = await userService.findUserById(id);
     if (!user) {
@@ -67,6 +68,8 @@ export const profileByIdController = async (req, res) => {
     }
     res.status(200).json({ user });
 }
+
+// Split the below controllers with service module
 
 export const completeProfileController = async (req, res) => {
     try {
@@ -84,8 +87,6 @@ export const completeProfileController = async (req, res) => {
         } = req.body;
 
         const user = await userModel.findOne({ _id: userId });
-
-        console.log(user);
 
         const updatedUser = await userModel.findByIdAndUpdate(
             userId,
@@ -117,9 +118,7 @@ export const completeProfileController = async (req, res) => {
 export const updateProfileController = async (req, res) => {
     try {
         const userId = req.user._id; // JWT middleware ne yeh set kiya
-        console.log(userId);
         const user = await userModel.findById(userId);
-        console.log(req.user);
 
         if (user.isProfileComplete === false) {
             return res.status(400).json({ message: 'Please complete your profile first' });
@@ -178,8 +177,9 @@ export const getEnrolledCourses = async (req, res) => {
 
 export const logoutController = async (req, res) => {
     try {
-        const token = req.cookies?.token || req.headers?.authorization.split(' ')[1];
-        redisClient.set(token, 'logout', 'EX', 60 * 60 * 24);
+        // const token = req.cookies?.token || req.headers?.authorization.split(' ')[1];
+        // redisClient.set(token, 'logout', 'EX', 60 * 60 * 24);
+        res.clearCookie("token")
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
         res.status(400).json({ error: error.message });

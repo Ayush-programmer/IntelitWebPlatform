@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep }) => {
+const CompleteTeacherProfileStep2 = ({ formData, handleChange, setFormData, nextStep, prevStep, errors }) => {
     const [showOtherInput, setShowOtherInput] = useState(formData.currentPosition === 'Other');
 
     const handlePositionChange = (e) => {
@@ -23,7 +23,7 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
             });
         }
     };
-    
+
     return (
         <div className="step-form teacher-profile-card">
             <h2 className='teacher-profile-title'>Professional Details</h2>
@@ -31,21 +31,27 @@ const CompleteTeacherProfileStep2 = ({ formData, setFormData, nextStep, prevStep
             <div className="input-group">
                 <label>Bio</label>
                 <textarea
+                    name='bio'
                     rows="4"
                     value={formData.bio}
-                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                    onChange={handleChange}
                     placeholder="Tell us about yourself"
                 ></textarea>
+                {errors.bio &&
+                    <p className='error'>{errors.bio}</p>}
             </div>
 
             <div className="input-group">
                 <label>Education</label>
                 <input
                     type="text"
+                    name='education'
                     value={formData.education}
-                    onChange={(e) => setFormData({ ...formData, education: e.target.value })}
+                    onChange={handleChange}
                     placeholder="e.g. Bsc, BTech, Msc, ME, PhD, etc."
                 />
+                {errors.education &&
+          <p className='error'>{errors.education}</p>}
             </div>
 
             <div className="input-group">

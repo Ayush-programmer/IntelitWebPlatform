@@ -26,13 +26,15 @@ const Sidebar = ({ user }) => {
           <i className="fa-solid fa-user-graduate icon"></i>
           <Link to="/userdashboard" className='link-name'>My Courses</Link>
         </div>
-        <div className="link">
-          <i class="fa-solid fa-message icon"></i>
-          <Link to="/userdashboard" className='link-name'>Join Chat</Link>
+        <div className="link coming-soon-link">
+          <i className="fa-solid fa-message icon"></i>
+          <span className="link-name">Join Chat</span>
+          <span className="coming-soon-badge">Coming Soon</span>
         </div>
-        <div className="link">
+        <div className="link coming-soon-link">
           <i className="fa-solid fa-book icon"></i>
-          <Link to="/userdashboard" className='link-name'>Resources</Link>
+          <span className="link-name">Resources</span>
+          <span className="coming-soon-badge">Coming Soon</span>
         </div>
       </div>
     </div>

@@ -36,15 +36,28 @@ export const checkout = async (req, res) => {
         receipt: `receipt_order_${Date.now()}`,
     };
 
+    console.log(options);
+
+    console.log(process.env.RAZORPAY_KEY_ID);
+    console.log(process.env.RAZORPAY_KEY_SECRET);
+
+
     try {
+        console.log("called");
         const order = await razorpay.orders.create(options);
+        console.log("order", order);
+
         res.json(order);
     } catch (err) {
+        console.log(err);
+
         res.status(500).send("Failed to create Razorpay order");
     }
 }
 
 export const verifyPayment = async (req, res) => {
+    console.log("verifyPayment");
+    
     const {
         razorpay_order_id,
         razorpay_payment_id,
@@ -63,6 +76,9 @@ export const verifyPayment = async (req, res) => {
 
     const isAuthentic = expectedSignature === razorpay_signature;
 
+    console.log("isAuthentic", isAuthentic);
+    
+
     if (isAuthentic) {
         // 1. Update user
         await User.findByIdAndUpdate(userId, {
@@ -75,7 +91,6 @@ export const verifyPayment = async (req, res) => {
         });
 
         // 3. Update teacher's uploadedCourses
-
         await Teacher.findByIdAndUpdate(teacherId, {
             $addToSet: { createdCourses: courseId },
         });

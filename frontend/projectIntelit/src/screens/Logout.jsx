@@ -11,6 +11,7 @@ const Logout = () => {
             setUser(null);
             localStorage.removeItem('token');
             localStorage.removeItem('role');
+            const token = localStorage.getItem('token');
             navigate('/login');
         }
     }).catch((error) => {

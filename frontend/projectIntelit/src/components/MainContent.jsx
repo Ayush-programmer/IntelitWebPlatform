@@ -15,13 +15,13 @@ const MainContent = ({ user, courses }) => {
           {courses.length ? (
             courses.map((course) => (
               <Link key={course._id} to={`/course/${course._id}`} className="course-card">
-                <div className="course-card" key={course._id}>
-                <img src={course.thumbnail} alt={course.title} className="course-thumbnail" />
-                <div className="course-info">
-                  <h4>{course.title}</h4>
-                  <p>{course.category}</p>
-                </div>
-              </div>
+                {/* <div className="course-card" key={course._id}> */}
+                  <img src={course.thumbnail} alt={course.title} className="course-thumbnail" />
+                  <div className="course-info">
+                    <h4>{course.title}</h4>
+                    <p>{course.category}</p>
+                  </div>
+                {/* </div> */}
               </Link>
             ))
           ) : (
@@ -32,7 +32,15 @@ const MainContent = ({ user, courses }) => {
 
       <section className="extras-section">
         <h3>Continue Your Journey</h3>
-        <p>Explore new topics and boost your skills.</p>
+
+        <p>
+          Explore new topics, strengthen your skills, and stay consistent.
+          Every lesson completed brings you one step closer to your goals.
+        </p>
+
+        <span className="journey-badge">
+          🚀 Keep Learning Every Day
+        </span>
       </section>
     </main>
   );

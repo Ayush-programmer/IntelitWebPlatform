@@ -4,7 +4,6 @@ import { FaPlayCircle, FaChevronDown, FaLock } from 'react-icons/fa';
 const CourseContents = ({ courseModules, setIndices, user, studentEnrolled }) => {
   const [openModule, setOpenModule] = useState(null);
   const [activeLesson, setActiveLesson] = useState([null, null]);
-  console.log(user);
 
   const toggleModule = (index) => {
     setOpenModule(openModule === index ? null : index);
@@ -22,7 +21,7 @@ const CourseContents = ({ courseModules, setIndices, user, studentEnrolled }) =>
   };
 
   const handleVideoChange = (moduleIndex, lessonIndex) => {
-    if (!studentEnrolled) return; // 🔒 Block access if not enrolled
+    if (!studentEnrolled) return; // Blocking access if not enrolled
     setIndices([moduleIndex, lessonIndex]);
     setActiveLesson([moduleIndex, lessonIndex]);
   };

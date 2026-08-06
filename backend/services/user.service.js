@@ -23,15 +23,10 @@ export const findUser = async ({ email }) => {
 
 export const findUserById = async ({ id }) => {
     try {
-        console.log("entering findUserById");
-        
-        console.log(id); // <-- Log the ID to see if it's correct
-        
         const user = await userModel.findById(id)
             .populate('enrolledCourses', 'title thumbnail category') // <-- Fetch details
             .select('-password');
         console.log(user); // <-- Log the user object to see the populated data
-        console.log("leaving findUserById");
         
         return user;
     } catch (error) {

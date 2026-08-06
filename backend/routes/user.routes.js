@@ -7,12 +7,12 @@ const router = Router();
 
 router.post('/register',
      body('email').isEmail().withMessage('Email must be a valid email address'),
-     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
      userController.createUserController);
 
 router.post('/login',
      body('email').isEmail().withMessage('Email must be a valid email address'),
-     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
      userController.loginUserController);
     
 router.get('/profile', authMiddleware.authUser, userController.profileController);

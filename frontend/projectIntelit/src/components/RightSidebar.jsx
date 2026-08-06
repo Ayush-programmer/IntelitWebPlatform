@@ -12,58 +12,82 @@ const RightSidebar = ({ user }) => {
 
   return (
     <aside className={`right-sidebar ${isRightSidebarVisible ? "show" : ""}`}>
-      <div className='flex align-center'>
+
+      {/* Sticky Header */}
+      <div className="right-sidebar-header">
+
         <div className="greeting">
+
           <div className="profile-image">
             <img src={profilePic} alt="profile" />
           </div>
-          <h3>Good Morning, {user?.profile.fullName?.split(' ')[0] || user?.username}!</h3>
+
+          <h3>
+            Good Morning,{" "}
+            {user?.profile.fullName?.split(" ")[0] || user?.username}!
+          </h3>
+
         </div>
-        <span className='down-btn'>
-          {!isRightSidebarVisible ? (
-            <FaChevronUp
-              size={20}
+
+        <button
+          className="sidebar-toggle-btn"
+          onClick={() =>
+            setIsRightSidebarVisible(!isRightSidebarVisible)
+          }
+        >
+          {isRightSidebarVisible ? (
+            <FaChevronDown
               className="dropdown-icon"
-              onClick={() => setIsRightSidebarVisible(true)}
+              size={20}
             />
           ) : (
-            <FaChevronDown
-              size={20}
+            <FaChevronUp
               className="dropdown-icon"
-              onClick={() => setIsRightSidebarVisible(false)}
+              size={20}
             />
           )}
+        </button>
 
-        </span>
       </div>
-      <p className='bio'><strong>Bio : </strong> {user.profile.bio}</p>
 
-      {isProfileIncomplete && (
-        <div className="complete-profile-card">
-          <h4>Complete Your Profile</h4>
-          <p>Complete your profile to unlock personalized recommendations and more.</p>
-          <Link className="complete-profile-btn" to='/completeprofile'>Complete Now</Link>
-        </div>
-      )}
+      {/* Scrollable Content */}
+      <div className="right-sidebar-content">
 
-      {/*  Note : Here I gave a condition to show the edit profile card only if the profile is complete and also i have given the classname same as complete-profile to avoid writing css for same button again and again */}
-      {!isProfileIncomplete && (
-        <div className="complete-profile-card">
-          <h4>Edit Your Profile</h4>
-          <Link className="complete-profile-btn" to='/updateprofile'>Edit Profile</Link>
-        </div>
-      )}
+        <p className="bio">
+          <strong>Bio :</strong> {user.profile.bio}
+        </p>
 
-      <div className="dummy-graph">
-        <h4>Learning Progress</h4>
-        <div className="graph-placeholder">
-          {/* Dummy Graph */}
-          <div className="bar bar1"></div>
-          <div className="bar bar2"></div>
-          <div className="bar bar3"></div>
-          <div className="bar bar4"></div>
-        </div>
+        {isProfileIncomplete ? (
+          <div className="complete-profile-card">
+            <h4>Complete Your Profile</h4>
+
+            <p>
+              Complete your profile to unlock personalized
+              recommendations and more.
+            </p>
+
+            <Link
+              className="complete-profile-btn"
+              to="/completeprofile"
+            >
+              Complete Now
+            </Link>
+          </div>
+        ) : (
+          <div className="complete-profile-card">
+            <h4>Edit Your Profile</h4>
+
+            <Link
+              className="complete-profile-btn"
+              to="/updateprofile"
+            >
+              Edit Profile
+            </Link>
+          </div>
+        )}
+
       </div>
+
     </aside>
   );
 };
