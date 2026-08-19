@@ -1,8 +1,8 @@
 import 'dotenv/config.js';
 import http from 'http';
 import app from './app.js';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
+// import jwt from 'jsonwebtoken';
+// import mongoose from 'mongoose';
 
 
 const PORT = process.env.PORT || 4000;

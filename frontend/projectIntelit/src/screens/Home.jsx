@@ -9,13 +9,15 @@ import TeacherSection from '../components/Home/TeacherSection'
 import ReviewSection from '../components/Home/ReviewSection'
 import WhyChooseSection from '../components/Home/WhyChooseSection'
 import TechStack from '../components/Home/TechStack'
+import { useAuth } from '../hooks/useAuth'
 
 const Home = () => {
   return (
     <div>
       <div className="app">
+
         <Navbar />
-      
+
         <HeroSection />
 
         <TechStack />

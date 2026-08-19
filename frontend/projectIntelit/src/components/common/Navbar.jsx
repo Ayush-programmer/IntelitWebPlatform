@@ -1,35 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import UserAuth from '../../auth/UserAuth';
+import { useAuth } from '../../hooks/useAuth';
+// import UserAuth from '../../auth/UserAuth';
 
 const Navbar = () => {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [dashbordLink, setDashboardLink] = useState('');
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [dashbordLink, setDashboardLink] = useState('');
+  // const [isTeacher, setIsTecher] = useState(false);
+
   const [showSidebar, setShowSidebar] = useState(false);
-  const [isTeacher, setIsTecher] = useState(false);
 
-  console.log(showSidebar);
+  const { user, teacher, role, isLoading } = useAuth();
 
+  const isAuthenticated = !!user || !!teacher;
+  const isTeacher = role === "teacher";
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
-    if (!token) {
-      setIsAuthenticated(false)
-    } else {
-      setIsAuthenticated(true);
-    }
-    if (role === 'teacher') {
-      setDashboardLink('/teacherdashboard');
-      setIsTecher(true);
-    } else if (role === 'student') {
-      setDashboardLink('/userdashboard');
-      setIsTecher(false);
-    } else {
-      setDashboardLink('');
-    }
-  });
+  const dashbordLink = role === "teacher" ? "/teacherdashboard" : role === "student" ? "/userdashboard" : "";
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   const role = localStorage.getItem('role');
+  //   if (!token) {
+  //     setIsAuthenticated(false)
+  //   } else {
+  //     setIsAuthenticated(true);
+  //   }
+  //   if (role === 'teacher') {
+  //     setDashboardLink('/teacherdashboard');
+  //     setIsTecher(true);
+  //   } else if (role === 'student') {
+  //     setDashboardLink('/userdashboard');
+  //     setIsTecher(false);
+  //   } else {
+  //     setDashboardLink('');
+  //   }
+  // });
 
   return (
     <nav className="navbar">
@@ -85,7 +91,7 @@ const Navbar = () => {
               <NavLink
                 onClick={() => setShowSidebar(false)}
                 className="navbar-link instructor-link"
-                to="/teacherlogin"
+                to="/teacherregister"
               >
                 Become Instructor
               </NavLink>

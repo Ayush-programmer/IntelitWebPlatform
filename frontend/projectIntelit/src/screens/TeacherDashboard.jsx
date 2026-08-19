@@ -3,7 +3,7 @@ import axios from '../config/axios.js';
 import { Menu, LogOut, Settings } from "lucide-react";
 import { FiUser } from 'react-icons/fi';
 import { IoMdMail } from 'react-icons/io';
-import { FaBook } from 'react-icons/fa';
+import { FaBook, FaChalkboardTeacher } from 'react-icons/fa';
 import { MdDashboard } from 'react-icons/md';
 import { MdHome } from 'react-icons/md';
 import { X } from "lucide-react";
@@ -11,38 +11,46 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Swal from "sweetalert2";
+import DashboardSkeleton from "../components/Loaders/DashboardSkeleton";
 
 const TeacherDashboard = () => {
-  const [teacher, setTeacher] = useState(null);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [teacher, setTeacher] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
 
   const isProfileIncomplete = !teacher?.isProfileComplete;
-  const profilePic = teacher?.profile.profilePic || 'dummy-profile.jpg';
 
   useEffect(() => {
-    const fetchTeacherData = async () => {
+    const loadDashboard = async () => {
       try {
-        const res = await axios.get('/teachers/profile');
-        setTeacher(res.data.teacher);
-        console.log(teacher);
+        setDashboardLoading(true);
 
-        if (res.data.teacher.createdCourses.length) {
-          const coursesRes = await axios.get('/teachers/createdcourses');
-          setCourses(coursesRes.data.courses);
-        }
-      } catch (err) {
-        console.error(err);
+        const [profileRes, coursesRes] = await Promise.all([
+          axios.get("/teachers/profile"),
+          axios.get("/teachers/createdcourses")
+        ]);
+
+        console.log("Hello", profileRes, coursesRes);
+
+
+        setTeacher(profileRes.data.teacher);
+        setCourses(coursesRes.data.courses);
+
+
+
+      } catch (error) {
+        toast.error("Failed to load dashboard");
       } finally {
-        setLoading(false);
+        setDashboardLoading(false);
       }
     };
 
-    fetchTeacherData();
+    loadDashboard();
   }, []);
+
   useEffect(() => {
     console.log(teacher?.isProfileComplete);
     setIsProfileComplete(teacher?.isProfileComplete);
@@ -112,7 +120,9 @@ const TeacherDashboard = () => {
     }
   };
 
-  if (loading) return <div className="teacher-loading">Loading...</div>;
+  if (dashboardLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="dashboard-wrapper">
@@ -236,7 +246,8 @@ const TeacherDashboard = () => {
           <div className="greeting">
 
             <div className="profile-image">
-              <img src={profilePic} alt="profile" />
+              <img src={teacher?.profile?.profilePic || "./images/dummy-profile.jpg"}
+                alt="profile" />
             </div>
 
             <h3>
@@ -264,10 +275,10 @@ const TeacherDashboard = () => {
         {/* Scrollable Content */}
         <div className="right-sidebar-content">
 
-          <p className="bio">
+          {isProfileComplete && <p className="bio">
             <strong>Bio :</strong> {teacher.profile.bio}
           </p>
-
+          }
           {isProfileIncomplete ? (
             <div className="complete-profile-card">
               <h4>Complete Your Profile</h4>

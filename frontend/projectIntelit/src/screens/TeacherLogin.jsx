@@ -1,44 +1,72 @@
-import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from '../config/axios.js'
-import { TeacherContext } from '../context/Teacher.context.jsx'
-import toast from 'react-hot-toast'
+
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from '../config/axios.js';
+import toast from 'react-hot-toast';
 import {
     BookOpen,
     UploadCloud,
     LayoutDashboard,
-    ShieldCheck
+    ShieldCheck,
+    Eye,
+    EyeOff
 } from "lucide-react";
+import { useAuth } from '../hooks/useAuth.js';
 
 const TeacherLogin = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
 
-    const { setTeacher, setIsLoading, setError } = useContext(TeacherContext);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const { loginTeacher, setIsLoading, setError } = useAuth();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
         setError(null);
 
-        axios.post('/teachers/login', { email, password }).then((res) => {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('role', res.data.role);
-            console.log(res.data.teacher);
+        try {
+            const { data } = await axios.post(
+                "/teachers/login",
+                formData
+            );
 
-            setTeacher(res.data.teacher);
+            loginTeacher({
+                teacher: data.teacher,
+                token: data.token
+            });
 
-            toast.success("Logged In")
+            toast.success("Logged In");
+
             navigate('/teacherdashboard');
-        }).catch((err) => {
-            toast.error("Invalid email or password")
-            setError('Invalid email or password')
-        }).finally(() => {
+
+        } catch (err) {
+            console.log(err);
+
+            toast.error("Invalid email or password");
+
+            setError("Invalid Email or Password");
+
+        } finally {
             setIsLoading(false);
-        })
-    }
+        }
+    };
+
     return (
         <div className="loginApp teacherLogin">
 
@@ -106,29 +134,55 @@ const TeacherLogin = () => {
 
                     <form onSubmit={handleSubmit}>
 
-                        <label htmlFor="email">Email Address</label>
+                        <label htmlFor="email">
+                            Email Address
+                        </label>
 
                         <input
                             type="email"
                             id="email"
                             name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="Enter your email"
                             required
                         />
 
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">
+                            Password
+                        </label>
 
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            required
-                        />
+                        <div className="password-field">
+
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Enter your password"
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowPassword(prev => !prev)
+                                }
+                                aria-label={
+                                    showPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                            >
+                                {showPassword
+                                    ? <EyeOff size={20} />
+                                    : <Eye size={20} />
+                                }
+                            </button>
+
+                        </div>
 
                         <button
                             type="submit"
@@ -141,14 +195,20 @@ const TeacherLogin = () => {
 
                     <p className="register-link">
                         New Teacher?
-                        <Link to="/teacherregister" className="links">
+                        <Link
+                            to="/teacherregister"
+                            className="links"
+                        >
                             Create Account
                         </Link>
                     </p>
 
                     <p className="register-link">
                         Student?
-                        <Link to="/login" className="links">
+                        <Link
+                            to="/login"
+                            className="links"
+                        >
                             Student Login
                         </Link>
                     </p>
@@ -158,7 +218,7 @@ const TeacherLogin = () => {
             </div>
 
         </div>
-    )
-}
+    );
+};
 
-export default TeacherLogin
+export default TeacherLogin;

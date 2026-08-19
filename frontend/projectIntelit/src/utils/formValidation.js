@@ -24,8 +24,8 @@ export const validateUsername = (value) => {
         return "username is required";
     }
 
-    if (value.length < 3) {
-        return "username should be atleast 3 characters"
+    if (value.length < 6) {
+        return "username should be atleast 6 characters"
     }
 
     const regex = /^[a-zA-Z][a-zA-Z0-9_]{2,14}$/;
@@ -60,7 +60,7 @@ export const validatePassword = (value) => {
 };
 
 export const validateTextField = (value) => {
-    const regex = /^[a-zA-Z0-9\s.,!?'"()-]*$/;
+    const regex = /^[a-zA-Z0-9\s.,!?'"+()-]*$/;
 
     if (!regex.test(value)) {
         return "Invalid Characters"
@@ -106,7 +106,7 @@ export const validateTitle = (value, fieldName = "Title") => {
     if (value.trim().length > 100)
         return `${fieldName} cannot exceed 100 characters.`;
 
-    const regex = /^[A-Za-z0-9\s.,:()&+'#./-]+$/;
+    const regex = /^[A-Za-z0-9\s.,:()&+'?#./-]+$/;
 
     if (!regex.test(value))
         return `${fieldName} contains invalid characters.`;

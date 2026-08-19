@@ -1,25 +1,26 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from '../config/axios.js'
-import { UserContext } from '../context/User.context.jsx'
 import { validateEmail, validatePassword } from '../utils/formValidation.js'
 import toast from 'react-hot-toast'
 import {
     BookOpen,
     GraduationCap,
-    MonitorPlay
+    MonitorPlay,
+    Eye,
+    EyeOff
 } from "lucide-react";
+import { useAuth } from '../hooks/useAuth.js'
+
 const Login = () => {
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         email: '',
         password: ''
-    })
-
-    const { setUser, setIsLoading, setError } = useContext(UserContext);
-
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const { loginStudent, setIsLoading, setError } = useAuth();
     const navigate = useNavigate();
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -29,36 +30,34 @@ const Login = () => {
         if (name === 'email') {
             error = validateEmail(value);
         }
-        // if (name === 'password') {
-        //     error = validatePassword(value);
-        // }
-
         setErrors(prev => ({
             ...prev, [name]: error
         }));
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         setIsLoading(true);
         setError(null);
 
-        axios.post('/users/login', formData).then((res) => {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('role', res.data.role);
+        try {
+            const { data } = await axios.post("/users/login", formData);
 
-            setUser(res.data.user);
-
-            toast.success('Logged In')
-
-            navigate('/userdashboard');
-        }).catch((err) => {
-            toast.error('Invalid email or password')
-            setError('Invalid email or password')
-        }).finally(() => {
+            await loginStudent({
+                user: data.user,
+                token: data.token
+            });
+            toast.success("Logged In");
+            navigate("/userdashboard");
+        } catch (err) {
+            toast.error("Invalid email or password");
+            setError("Invalid email or password");
+        } finally {
             setIsLoading(false);
-        })
-    }
+        }
+    };
+
     return (
         <div className="loginApp">
 
@@ -169,18 +168,30 @@ const Login = () => {
                         </div>
 
                         <div className="input-group">
-
                             <label>Password</label>
 
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Enter your password"
-                                required
-                            />
+                            <div    
+                            htmlFor='password' className="password-field">
+
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Enter your password"
+                                    required
+                                />
+
+                                <button
+                                    type="button"
+                                    className="password-toggle"
+                                    onClick={() => setShowPassword(prev => !prev)}
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+
+                            </div>
 
                         </div>
 

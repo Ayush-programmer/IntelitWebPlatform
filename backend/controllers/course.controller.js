@@ -4,8 +4,6 @@ import cloudinary from '../db/cloudinary.js';
 
 export const createCourse = async (req, res) => {
     try {
-        console.log(req.body);
-
         const { title, description, category, price, thumbnail, courseContents, topicsToLearn, faq, references, materials, reviews, enrolledStudents } = req.body;
 
         if (!title || !description || !category || !thumbnail) {

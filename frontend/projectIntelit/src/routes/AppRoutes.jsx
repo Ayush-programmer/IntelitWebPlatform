@@ -4,14 +4,12 @@ import { Toaster } from 'react-hot-toast';
 
 import Login from '../screens/Login.jsx'
 import Register from '../screens/Register.jsx'
-import Logout from '../screens/Logout.jsx'
 import About from '../screens/About.jsx'
 import Contact from '../screens/Contact.jsx'
 import BrowseCourses from '../screens/BrowseCourses.jsx'
 import Home from '../screens/Home.jsx'
 import TeacherLogin from '../screens/TeacherLogin.jsx'
 import TeacherRegister from '../screens/TeacherRegister.jsx'
-import TeacherLogout from '../screens/TeacherLogout.jsx'
 import UserDashboard from '../screens/UserDashboard.jsx'
 import TeacherDashboard from '../screens/TeacherDashboard.jsx'
 import UserProtectedWrapper from '../screens/UserProtectedWrapper.jsx'
@@ -22,6 +20,7 @@ import EnrollPage from '../screens/EnrollPage.jsx'
 import PaymentSuccessPage from '../screens/PaymentSuccessPage.jsx'
 import CompleteProfile from '../screens/CompleteProfile.jsx'
 import CompleteTeacherProfile from '../screens/CompleteTeacherProfile.jsx'
+import NeutralLogout from '../screens/NeutralLogout.jsx';
 
 const AppRoutes = () => {
     return (
@@ -40,27 +39,28 @@ const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/logout" element={<UserProtectedWrapper><Logout /></UserProtectedWrapper>} />
                 <Route path="/about" element={<About />} />
                 <Route path="/browsecourses" element={<BrowseCourses />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path='/teacherlogin' element={<TeacherLogin />} />
                 <Route path='/teacherregister' element={<TeacherRegister />} />
-                <Route path='/teacherlogout' element={<TeacherProtectedWrapper><TeacherLogout /></TeacherProtectedWrapper>} />
                 <Route path='/userdashboard' element={<UserProtectedWrapper><UserDashboard /></UserProtectedWrapper>} />
                 <Route path='/completeprofile' element={<UserProtectedWrapper><CompleteProfile /></UserProtectedWrapper>} />
                 <Route path='/updateprofile' element={<UserProtectedWrapper><CompleteProfile /></UserProtectedWrapper>} />
                 <Route path='/teacherdashboard' element={<TeacherProtectedWrapper><TeacherDashboard /></TeacherProtectedWrapper>} />
-                <Route path='/completeteacherprofile' element={<CompleteTeacherProfile />} />
-                <Route path='/updateteacherprofile' element={<CompleteTeacherProfile />} />
+                <Route path="/completeteacherprofile" element={<TeacherProtectedWrapper><CompleteTeacherProfile /></TeacherProtectedWrapper>} />
+                <Route path="/updateteacherprofile" element={<TeacherProtectedWrapper><CompleteTeacherProfile /></TeacherProtectedWrapper>} />
                 <Route path='/course/:courseId' element={<Course />} />
                 <Route path='/uploadcourse' element={<TeacherProtectedWrapper><CourseUpload /></TeacherProtectedWrapper>} />
                 <Route path='/editcourse/:courseId' element={<TeacherProtectedWrapper><CourseUpload /></TeacherProtectedWrapper>} />
                 <Route path='/enroll/:id' element={<UserProtectedWrapper><EnrollPage /></UserProtectedWrapper>} />
                 <Route path='/payment-success/:courseId' element={<UserProtectedWrapper><PaymentSuccessPage /></UserProtectedWrapper>} />
+                <Route path='/logout' element={<NeutralLogout />} />
             </Routes>
-        </BrowserRouter>
+        </BrowserRouter >
     )
 }
+
+// remove older logouts
 
 export default AppRoutes

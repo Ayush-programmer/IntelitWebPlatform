@@ -5,23 +5,35 @@ import LeftSidebar from "../components/UserDashboardSidebar.jsx";
 import MainContent from "../components/MainContent.jsx";
 import RightSidebar from "../components/RightSidebar.jsx";
 import { Menu } from "lucide-react";
+import { useAuth } from "../hooks/useAuth.js";
+import DashboardSkeleton from "../components/Loaders/DashboardSkeleton.jsx";
 
 const Dashboard = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get("/users/profile");
-        setUser(res.data.user);
+  const { user, isLoading } = useAuth();
 
-        if (res.data.user.enrolledCourses.length) {
-          const coursesRes = await axios.get("/users/enrolledCourses");
-          setCourses(coursesRes.data.enrolledCourses);
-        }
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    if (!user.enrolledCourses.length) {
+      setLoading(false);
+      return;
+    }
+    const fetchCourses = async () => {
+      try {
+        const { data } = await axios.get("/users/enrolledCourses");
+        setCourses(data.enrolledCourses);
       } catch (err) {
         console.error(err);
       } finally {
@@ -29,14 +41,14 @@ const Dashboard = () => {
       }
     };
 
-    fetchProfile();
-  }, []);
+    fetchCourses();
+  }, [user, isLoading]);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading || isLoading) return <DashboardSkeleton />;
 
   return (
     <div className="dashboard-wrapper">
-      { !isSidebarOpen &&
+      {!isSidebarOpen &&
         <button
           className="menu-toggle-btn"
           onClick={() => setIsSidebarOpen(true)}

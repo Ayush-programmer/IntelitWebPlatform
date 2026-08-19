@@ -2,31 +2,20 @@ import React, { useEffect, useContext, use } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
 import successAnimation from "../assets/Success-Lotie-Animation.json";
-import { UserContext } from "../context/user.context.jsx";
 import axios from "../config/axios.js";
+import { useAuth } from "../hooks/useAuth.js";
 
 const PaymentSuccessPage = () => {
     const navigate = useNavigate();
     const { courseId } = useParams();
-    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        if (!user) {
-            navigate("/login");
-            return;
-        }
-
-        setTimeout(() => {
-            navigate(`/course/${courseId}`);
+        const timer = setTimeout(() => {
+            navigate(`/course/${courseId}`, { replace: true });
         }, 5000);
 
-    }, [user, navigate]);
-
-    useEffect(() => {
-        if (!user) {
-            navigate("/login");
-        }
-    }, [user, navigate]);
+        return () => clearTimeout(timer);
+    }, [courseId, navigate]);
 
     return (
         <div className="success-container">
@@ -37,8 +26,13 @@ const PaymentSuccessPage = () => {
                     src={successAnimation}
                     style={{ height: "200px", width: "200px" }}
                 />
+
                 <h1>Payment Successful!</h1>
-                <p className="message">Welcome aboard! You're enrolled 🎉</p>
+
+                <p className="message">
+                    Welcome aboard! You're enrolled 🎉
+                </p>
+
                 <div className="redirect-msg">
                     <span>Redirecting to course</span>
                     <span className="dot-flashing"></span>

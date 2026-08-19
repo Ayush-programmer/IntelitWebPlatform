@@ -5,7 +5,7 @@ const MainContent = ({ user, courses }) => {
   return (
     <main className="main-content">
       <section className="welcome-banner">
-        <h2>Welcome back, {user?.username}!</h2>
+        <h2>Welcome back, {user?.profile?.fullName || user?.username}!</h2>
         <p>Let's continue learning and growing.</p>
       </section>
 

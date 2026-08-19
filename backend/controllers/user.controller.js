@@ -31,7 +31,7 @@ export const loginUserController = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await userModel.findOne({ email }).select('+password');
+        const user = await userModel.findOne({ email }).select('+password').populate('enrolledCourses', 'title thumbnail category'); // <-- Fetch details;
         if (!user) {
             return res.status(401).json({ error: 'No such account found' });
         }

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { LogOut } from 'lucide-react'
 
 const Sidebar = ({ user }) => {
   return (
     <div className={`sidebar ${user ? "" : "hide"}`}>
       <div className="logo">
-        <a className="brand-logo" href="#">
+        <a className="brand-logo" href="/">
           Intelit
         </a>
       </div>
@@ -35,6 +36,11 @@ const Sidebar = ({ user }) => {
           <i className="fa-solid fa-book icon"></i>
           <span className="link-name">Resources</span>
           <span className="coming-soon-badge">Coming Soon</span>
+        </div>
+        <div className="link logout-link">
+          <a href="/logout" className="sidebar-link">
+            <span className="nav-links-icon"><LogOut size={20} /></span> <span>Logout</span>
+          </a>
         </div>
       </div>
     </div>

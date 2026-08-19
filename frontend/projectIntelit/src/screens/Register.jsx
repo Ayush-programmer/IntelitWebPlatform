@@ -1,14 +1,16 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from '../config/axios.js'
-import { UserContext } from '../context/User.context.jsx'
 import { validateUsername, validateEmail, validatePassword } from '../utils/formValidation.js'
 import toast from 'react-hot-toast'
 import {
   GraduationCap,
   BookOpen,
-  Users
+  Users,
+  Eye,
+  EyeOff
 } from "lucide-react";
+import { useAuth } from '../hooks/useAuth.js'
 
 const Register = () => {
   const [errors, setErrors] = useState({});
@@ -16,12 +18,11 @@ const Register = () => {
     username: '',
     email: '',
     password: ''
-  })
+  });
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { user, setUser } = useContext(UserContext);
-
+  const { loginStudent } = useAuth();
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -44,22 +45,17 @@ const Register = () => {
     }));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios.post('/users/register', formData).then((res) => {
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', res.data.role);
+    const { data } = await axios.post("/users/register", formData);
+    loginStudent({
+      user: data.user,
+      token: data.token
+    });
 
-      setUser(res.data.user);
-
-      toast.success('Registration Successful');
-
-      navigate('/userdashboard');
-    }).catch((err) => {
-      toast.error(err.response?.data?.errors || "Something went wrong.");
-      console.log(err);
-    })
+    toast.success("Registration Successful");
+    navigate("/userdashboard");
   }
 
   return (
@@ -190,15 +186,25 @@ const Register = () => {
               Password
             </label>
 
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a strong password"
-              required
-            />
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
 
             {errors.password &&
               <p className="error">

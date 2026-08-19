@@ -1,15 +1,17 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from '../config/axios.js'
-import { TeacherContext } from '../context/Teacher.context.jsx'
 import toast from 'react-hot-toast'
 import { validateEmail, validateName, validatePassword } from '../utils/formValidation.js'
 import {
   BookOpen,
   UploadCloud,
   LayoutDashboard,
-  ShieldCheck
+  ShieldCheck,
+  Eye,
+  EyeOff
 } from "lucide-react";
+import { useAuth } from '../hooks/useAuth.js'
 
 const Register = () => {
   const [errors, setErrors] = useState({});
@@ -17,9 +19,9 @@ const Register = () => {
     name: '',
     email: '',
     password: ''
-  })
-
-  const { teacher, setTeacher } = useContext(TeacherContext);
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const { loginTeacher } = useAuth();
 
   const navigate = useNavigate();
 
@@ -46,22 +48,25 @@ const Register = () => {
     }));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios.post('/teachers/register', formData).then((res) => {
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', res.data.role);
-      setTeacher(res.data.teacher);
+    try {
+      const { data } = await axios.post("/teachers/register", formData);
 
-      toast.success('Registration Successful');
-      navigate('/teacherdashboard');
-    }).catch((err) => {
-      toast.error(err.response?.data?.errors || "Something went wrong.");
+      await loginTeacher({
+        teacher: data.teacher,
+        token: data.token
+      });
+
+      toast.success("Registration Successful");
+
+      navigate("/teacherdashboard");
+    } catch (err) {
       console.log(err);
-    })
+      toast.error(err.response?.data?.errors || "Something went wrong");
+    }
   }
-
   return (
     <div className="teacherRegister">
 
@@ -175,17 +180,27 @@ const Register = () => {
             <label htmlFor="password">
               Password
             </label>
+            <div className="password-field">
 
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a secure password"
-              required
-            />
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+              />
 
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+
+            </div>
             {errors.password &&
               <p className="error">
                 {errors.password}

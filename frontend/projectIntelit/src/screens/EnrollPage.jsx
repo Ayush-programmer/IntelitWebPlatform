@@ -1,8 +1,8 @@
 import axios from '../config/axios.js';
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { UserContext } from '../context/user.context.jsx';
 import toast from 'react-hot-toast';
+import { useAuth } from '../hooks/useAuth.js';
 
 const EnrollPage = () => {
     const { id } = useParams();
@@ -11,7 +11,10 @@ const EnrollPage = () => {
 
     const navigate = useNavigate();
 
-    const { user, isLoading, fetchUserData } = useContext(UserContext);
+    const { user, isLoading, fetchProfile } = useAuth();
+    if (!user) {
+        navigate('/login');
+    }
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -60,9 +63,14 @@ const EnrollPage = () => {
                         // Verify payment and enroll user
                         await axios.post("/payments/verify", paymentDetails)
 
+                        await axios.post(`/course-progress/${course._id}`);
                         toast.success("Payment successful and user enrolled!");
-                        await fetchUserData();
-                        navigate(`/payment-success/${course._id}`);
+
+                        navigate(`/payment-success/${course._id}`, {
+                            replace: true
+                        });
+
+                        await fetchProfile();
                     } catch (error) {
                         toast.error("Payment success, but enrollment failed.");
                     };
@@ -94,17 +102,14 @@ const EnrollPage = () => {
     }, [id]);
 
     useEffect(() => {
-        if (!user) {
-            fetchUserData();
-        }
-    }, [user, fetchUserData])
-
-    useEffect(() => {
         if (course) {
             console.log(course);
         }
     }, [course]);
 
+    if (isLoading) {
+        return <Loader />;
+    }
     if (!course) return <div>Loading...</div>;
 
     return (

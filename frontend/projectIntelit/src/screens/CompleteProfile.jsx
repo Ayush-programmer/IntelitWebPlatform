@@ -190,6 +190,8 @@ const CompleteProfile = () => {
         ? await axios.put('/users/update-profile', payload)
         : await axios.post('/users/complete-profile', payload);
 
+      console.log(res);
+      
       if (res.status === 200) {
         toast.success(isEditMode ? 'Profile updated!' : 'Profile completed!');
         navigate('/userdashboard');

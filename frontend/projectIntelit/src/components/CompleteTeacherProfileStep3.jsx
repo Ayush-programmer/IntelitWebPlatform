@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { uploadThumbnailToCloudinary } from '../utils/cloudinaryUtils';
 
 
 const CompleteTeacherProfileStep3 = ({ formData, handleChange, setFormData, prevStep, handleSubmit, errors }) => {
+    const [uploading, setUploading] = useState(false);
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
             if (!file) return;
+            setUploading(true);
             const url = await uploadThumbnailToCloudinary(file);
             console.log('Image URL:', url);
             if (!url) return;
             setFormData({ ...formData, profilePic: url });
+            setUploading(false);
         }
     };
 
@@ -21,6 +24,7 @@ const CompleteTeacherProfileStep3 = ({ formData, handleChange, setFormData, prev
             <div className="input-group">
                 <label>Upload Profile Picture</label>
                 <input type="file" accept="image/*" onChange={handleImageUpload} />
+                {uploading && <div className="loader">Uploading...</div>}
                 {formData.profilePic && (
                     <img
                         src={formData.profilePic}
@@ -93,7 +97,7 @@ const CompleteTeacherProfileStep3 = ({ formData, handleChange, setFormData, prev
 
             <div className="button-group">
                 <button onClick={prevStep} className="prev-btn">Previous</button>
-                <button onClick={handleSubmit} className="submit-btn">Submit</button>
+                <button onClick={handleSubmit} className="submit-btn" disabled={uploading}>{uploading ? "Submitting..." : "Submit"}</button>
             </div>
         </div>
     );

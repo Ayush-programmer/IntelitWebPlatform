@@ -63,10 +63,10 @@ const CourseTabs = ({ user, course, studentEnrolled }) => {
             <h2><FaUserCircle /> Instructor</h2>
             <div className="author-info">
 
-              {course.teacher.profilePic ? (
+              {course.teacher.profile.profilePic ? (
                 <div className="author-image">
                   <img
-                    src={course.teacher.profilePic}
+                    src={course.teacher.profile?.profilePic}
                     alt={course.teacher.name}
                   />
                 </div>
